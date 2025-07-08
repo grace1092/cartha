@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Target, TrendingUp, Calendar, CheckCircle, Plus, Edit2, Trash2, DollarSign, Home, Car, GraduationCap, Heart } from 'lucide-react';
-import { supabase } from '@/lib/supabase/client';
+import { createClientSupabaseClient } from '@/lib/supabase/browserClient';
 
 interface FinancialGoal {
   id: string;

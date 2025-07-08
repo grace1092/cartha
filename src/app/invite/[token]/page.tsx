@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/context/AuthContext';
-import { supabase } from '@/lib/supabase/client';
+import { createClientSupabaseClient } from '@/lib/supabase/browserClient';
 import Button from '@/components/ui/Button';
 
 interface InvitationData {

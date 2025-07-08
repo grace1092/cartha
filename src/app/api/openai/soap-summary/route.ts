@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
-import { supabase } from '@/lib/supabase/client'
-import { createServerSupabaseClient } from '@/lib/supabase/client'
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
+import { Database } from '@/lib/supabase/database.types'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -10,15 +11,26 @@ const openai = new OpenAI({
 export async function POST(request: NextRequest) {
   try {
     // Get the current user
-    const supabaseServer = createServerSupabaseClient()
-    const { data: { session } } = await supabaseServer.auth.getSession()
+    const cookieStore = cookies()
+    const supabase = createServerClient<Database>(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return cookieStore.get(name)?.value
+          },
+        },
+      }
+    )
+    const { data: { session } } = await supabase.auth.getSession()
     
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     // Check subscription limits
-    const { data: canUse } = await supabaseServer.rpc(
+    const { data: canUse } = await supabase.rpc(
       'check_subscription_limits',
       {
         p_user_id: session.user.id,
@@ -81,7 +93,7 @@ Guidelines:
     }
 
     // Increment usage tracking
-    await supabaseServer.rpc('increment_usage', {
+    await supabase.rpc('increment_usage', {
       p_user_id: session.user.id,
       p_feature_type: 'soap_generation'
     })

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Calendar, Clock, Heart, TrendingUp, DollarSign, Target, CheckCircle } from 'lucide-react';
-import { supabase } from '@/lib/supabase/client';
+import { createClientSupabaseClient } from '@/lib/supabase/browserClient';
 
 interface MoneyDate {
   id: string;

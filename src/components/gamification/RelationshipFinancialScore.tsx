@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Heart, TrendingUp, Target, CheckCircle, AlertCircle, Trophy, Star } from 'lucide-react';
-import { supabase } from '@/lib/supabase/client';
+import { createClientSupabaseClient } from '@/lib/supabase/browserClient';
 
 interface ScoreData {
   overall_score: number;

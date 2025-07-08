@@ -1,6 +1,6 @@
 import { google } from 'googleapis'
 import { createClient } from '@supabase/supabase-js'
-import { supabase } from '@/lib/supabase/client'
+import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
 
 interface CalendarSlot {
   start: Date

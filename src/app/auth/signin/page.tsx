@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase/client'
+import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
 import { validateEmail } from '@/lib/utils'
 
 export default function SignIn() {
@@ -15,6 +15,8 @@ export default function SignIn() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  const supabase = createClientSupabaseClient()
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()

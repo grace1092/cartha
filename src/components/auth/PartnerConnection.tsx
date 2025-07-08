@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/context/AuthContext';
-import { supabase } from '@/lib/supabase/client';
+import { createClientSupabaseClient } from '@/lib/supabase/browserClient';
 import Button from '../ui/Button';
 
 interface PartnerInvite {

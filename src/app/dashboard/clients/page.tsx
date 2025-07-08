@@ -2,16 +2,26 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase/client'
+import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
 import { Client } from '@/lib/types/database'
 import { getClientInitials, formatDate } from '@/lib/utils'
 
 export default function ClientsPage() {
   const [clients, setClients] = useState<Client[]>([])
+
+  const supabase = createClientSupabaseClient()
   const [filteredClients, setFilteredClients] = useState<Client[]>([])
+
+  const supabase = createClientSupabaseClient()
   const [loading, setLoading] = useState(true)
+
+  const supabase = createClientSupabaseClient()
   const [searchTerm, setSearchTerm] = useState('')
+
+  const supabase = createClientSupabaseClient()
   const [filter, setFilter] = useState<'all' | 'active' | 'inactive'>('all')
+
+  const supabase = createClientSupabaseClient()
 
   useEffect(() => {
     fetchClients()

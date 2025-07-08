@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase/client'
+import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
 import { NotificationService } from '@/lib/notifications'
 import { CalendarIntegration } from '@/lib/calendar'
 

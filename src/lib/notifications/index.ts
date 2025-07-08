@@ -1,6 +1,6 @@
 import { Twilio } from 'twilio'
 import { createTransport } from 'nodemailer'
-import { supabase } from '@/lib/supabase/client'
+import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
 
 export interface NotificationPreferences {
   sms: boolean

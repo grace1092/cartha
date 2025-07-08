@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase/client'
+import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
 import { CreateClientForm } from '@/lib/types/database'
 import { validateEmail } from '@/lib/utils'
 
@@ -11,6 +11,8 @@ export default function NewClientPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  const supabase = createClientSupabaseClient()
 
   const [formData, setFormData] = useState<CreateClientForm>({
     first_name: '',

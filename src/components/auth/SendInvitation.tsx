@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/lib/context/AuthContext';
-import { supabase } from '@/lib/supabase/client';
+import { createClientSupabaseClient } from '@/lib/supabase/browserClient';
 import { validateEmail, validatePhoneNumber, generateInvitationEmail, generateSMSInvitation } from '@/lib/utils';
 import Button from '../ui/Button';
 

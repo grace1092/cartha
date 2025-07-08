@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase/client'
+import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
 import { DashboardStats, Profile, Client, TherapySession } from '@/lib/types/database'
 
 export default function Dashboard() {
@@ -15,6 +15,8 @@ export default function Dashboard() {
   const [recentClients, setRecentClients] = useState<Client[]>([])
   const [upcomingSessions, setUpcomingSessions] = useState<TherapySession[]>([])
   const [loading, setLoading] = useState(true)
+
+  const supabase = createClientSupabaseClient()
 
   useEffect(() => {
     const fetchDashboardData = async () => {

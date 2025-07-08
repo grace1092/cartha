@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/context/AuthContext';
-import { supabase } from '@/lib/supabase/client';
+import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
 import Button from '@/components/ui/Button';
 
 export default function AcceptInvite() {
@@ -13,6 +13,8 @@ export default function AcceptInvite() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [invitation, setInvitation] = useState<any>(null);
+
+  const supabase = createClientSupabaseClient()
 
   useEffect(() => {
     const token = searchParams.get('token');
