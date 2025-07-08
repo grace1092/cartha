@@ -17,6 +17,7 @@ interface InvitationFormData {
 
 export default function SendInvitation() {
   const { user, profile } = useAuth();
+  const supabase = createClientSupabaseClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);

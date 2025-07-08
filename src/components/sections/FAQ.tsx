@@ -6,28 +6,24 @@ import { ChevronDownIcon } from '@heroicons/react/24/solid'
 
 const faqs = [
   {
-    question: 'How is this different from just talking about money?',
-    answer: 'MoneyTalks provides expertly crafted questions that progressively build intimacy and trust. Instead of awkward direct questions, our app creates a game-like experience that makes these conversations natural and fun. Plus, our structured approach ensures you cover all important topics systematically.'
+    question: 'How does Cartha help with session documentation?',
+    answer: 'Cartha provides AI-powered transcription and analysis that automatically creates detailed session notes. Instead of spending hours writing notes, our app creates comprehensive documentation that tracks client progress and treatment plans.'
   },
   {
-    question: 'Is this appropriate for early dating?',
-    answer: "Yes! In fact, dates 3-10 are the perfect time to start these conversations. Our questions are designed to start light and gradually become deeper as trust builds. This helps you discover financial compatibility before you're too emotionally invested.",
+    question: 'Is my client data secure and HIPAA compliant?',
+    answer: 'Yes, Cartha is built with healthcare-grade security and is fully HIPAA compliant. All client data is encrypted, and we follow strict privacy protocols to protect sensitive information.'
   },
   {
-    question: 'What if we discover we\'re incompatible?',
-    answer: 'Better to know early! Our app helps you identify both compatibility and potential areas for compromise. If major incompatibilities are discovered, you can make informed decisions about your relationship\'s future before investing years of emotional energy.'
+    question: 'Can I customize the automated follow-up emails?',
+    answer: 'Absolutely! Cartha provides personalized email templates that you can customize for your practice. The system automatically sends follow-ups while maintaining your professional voice and brand.'
   },
   {
-    question: 'How long does each conversation take?',
-    answer: 'Most couples spend 15-30 minutes per session, but you can go at your own pace. The app is designed to be flexible - use it during dinner, on walks, or any time you want to deepen your connection.'
+    question: 'How does the client dashboard work?',
+    answer: 'The client dashboard provides a comprehensive overview of each client\'s progress, including session history, treatment milestones, and interactive charts. You can track outcomes and share progress reports with clients.'
   },
   {
-    question: 'Do we need to use all the cards?',
-    answer: 'No, you can use the app however works best for you. Some couples go through all cards systematically, while others pick topics that feel most relevant. The app tracks your progress so you can easily pick up where you left off.'
-  },
-  {
-    question: 'Is there a money-back guarantee?',
-    answer: 'Yes! We offer a 30-day money-back guarantee. If you\'re not satisfied with the app for any reason, we\'ll refund your purchase, no questions asked.'
+    question: 'What integrations does Cartha support?',
+    answer: 'Cartha integrates with popular practice management tools like Stripe for payments, Alma for insurance, and SimplePractice for scheduling. We\'re constantly adding new integrations based on therapist needs.'
   }
 ]
 
@@ -35,21 +31,28 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
-    <section className="py-20 sm:py-28">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
-            Frequently Asked Questions
-          </h2>
-          <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-            Everything you need to know about MoneyTalks Before Marriage™
-          </p>
-        </motion.div>
+    <section id="faq" className="py-20 lg:py-32 relative">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full blur-3xl opacity-50" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-purple-100 to-pink-100 rounded-full blur-3xl opacity-50" />
+      </div>
+
+      <div className="container-modern relative z-10">
+        {/* Section Header */}
+        <div className="text-center mb-20">
+          <div className="scroll-reveal">
+            <h2 className="heading-xl mb-6">
+              Frequently Asked
+              <span className="gradient-text"> Questions</span>
+            </h2>
+          </div>
+          <div className="scroll-reveal" style={{ animationDelay: '0.2s' }}>
+            <p className="body-lg max-w-3xl mx-auto">
+              Everything you need to know about Cartha and how it can transform your therapy practice.
+            </p>
+          </div>
+        </div>
 
         <div className="max-w-3xl mx-auto divide-y divide-gray-200">
           {faqs.map((faq, index) => (

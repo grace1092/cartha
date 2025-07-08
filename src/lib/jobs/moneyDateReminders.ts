@@ -2,6 +2,8 @@ import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
 import { NotificationService } from '@/lib/notifications'
 import { CalendarIntegration } from '@/lib/calendar'
 
+const supabase = createClientSupabaseClient()
+
 interface ReminderJob {
   sessionId: string
   userId: string
@@ -150,8 +152,7 @@ export class MoneyDateReminderProcessor {
 
           // For upcoming sessions, also add to calendar if not already added
           if (job.reminderType === 'upcoming') {
-            const calendar = new CalendarIntegration()
-            await calendar.addOrUpdateEvent({
+            await CalendarIntegration.addOrUpdateEvent({
               userId: job.userId,
               eventId: job.sessionId,
               title: 'Money Date',
@@ -161,7 +162,7 @@ export class MoneyDateReminderProcessor {
             })
 
             if (job.partnerId) {
-              await calendar.addOrUpdateEvent({
+              await CalendarIntegration.addOrUpdateEvent({
                 userId: job.partnerId,
                 eventId: job.sessionId,
                 title: 'Money Date',

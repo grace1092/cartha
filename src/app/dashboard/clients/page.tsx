@@ -8,17 +8,9 @@ import { getClientInitials, formatDate } from '@/lib/utils'
 
 export default function ClientsPage() {
   const [clients, setClients] = useState<Client[]>([])
-
-  const supabase = createClientSupabaseClient()
   const [filteredClients, setFilteredClients] = useState<Client[]>([])
-
-  const supabase = createClientSupabaseClient()
   const [loading, setLoading] = useState(true)
-
-  const supabase = createClientSupabaseClient()
   const [searchTerm, setSearchTerm] = useState('')
-
-  const supabase = createClientSupabaseClient()
   const [filter, setFilter] = useState<'all' | 'active' | 'inactive'>('all')
 
   const supabase = createClientSupabaseClient()

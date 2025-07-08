@@ -13,7 +13,7 @@ import {
   ChevronRightIcon,
   TrashIcon,
   EyeIcon,
-  SaveIcon
+  BookmarkIcon
 } from '@heroicons/react/24/outline';
 import { ContentDeck, ContentCard, ContentTheme, DeckCreationData } from '@/lib/types/content';
 import Button from '@/components/ui/Button';
@@ -95,7 +95,7 @@ const ContentCMS: React.FC<ContentCMSProps> = ({ mode, deckId, onSave, onCancel 
       return;
     }
 
-    onSave(deckData);
+    onSave(deckData as Partial<ContentDeck>);
   };
 
   const validateDeck = (): Record<string, string> => {
@@ -188,7 +188,7 @@ const ContentCMS: React.FC<ContentCMSProps> = ({ mode, deckId, onSave, onCancel 
                 disabled={isLoading}
                 className="flex items-center"
               >
-                <SaveIcon className="h-4 w-4 mr-2" />
+                <BookmarkIcon className="h-4 w-4 mr-2" />
                 {mode === 'create' ? 'Create Deck' : 'Save Changes'}
               </Button>
             </div>

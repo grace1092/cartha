@@ -23,6 +23,7 @@ interface InvitationData {
 export default function InvitationPage({ params }: { params: { token: string } }) {
   const router = useRouter();
   const { user, profile } = useAuth();
+  const supabase = createClientSupabaseClient();
   const [invitation, setInvitation] = useState<InvitationData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

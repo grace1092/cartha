@@ -16,6 +16,7 @@ interface DashboardStats {
 
 export default function CouplesDashboard() {
   const { user, profile } = useAuth();
+  const supabase = createClientSupabaseClient();
   const [partnerProfile, setPartnerProfile] = useState<UserProfile | null>(null);
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);

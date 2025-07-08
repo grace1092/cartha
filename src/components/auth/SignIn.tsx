@@ -9,6 +9,7 @@ import type { AuthError } from '@supabase/supabase-js';
 
 export default function SignIn() {
   const router = useRouter();
+  const supabase = createClientSupabaseClient();
   const [error, setError] = useState<string | null>(null);
 
   return (

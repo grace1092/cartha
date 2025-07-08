@@ -85,6 +85,7 @@ const getScoreMessage = (score: number) => {
 };
 
 export default function RelationshipFinancialScore({ className = '' }: RelationshipFinancialScoreProps) {
+  const supabase = createClientSupabaseClient();
   const [scoreData, setScoreData] = useState<ScoreData | null>(null);
   const [loading, setLoading] = useState(true);
   const [showDetails, setShowDetails] = useState(false);

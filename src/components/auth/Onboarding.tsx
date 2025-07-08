@@ -67,6 +67,7 @@ const quizQuestions = [
 export default function Onboarding() {
   const router = useRouter();
   const { user, refreshProfile } = useAuth();
+  const supabase = createClientSupabaseClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState(1);

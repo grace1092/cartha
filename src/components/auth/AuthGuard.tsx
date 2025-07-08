@@ -18,6 +18,7 @@ export const AuthGuard = ({
   requireSubscription = false,
 }: AuthGuardProps) => {
   const router = useRouter();
+  const supabase = createClientSupabaseClient();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [hasPartner, setHasPartner] = useState(false);

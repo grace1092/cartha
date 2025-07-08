@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
 import { validateEmail } from '@/lib/utils'
 
-export default function SignIn() {
+function SignInContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams?.get('redirect') || '/dashboard'
@@ -168,5 +168,23 @@ export default function SignIn() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function SignIn() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 flex items-center justify-center p-4">
+        <div className="relative z-10 w-full max-w-md">
+          <div className="glass-card p-8">
+            <div className="text-center">
+              <div className="animate-pulse">Loading...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }>
+      <SignInContent />
+    </Suspense>
   )
 } 

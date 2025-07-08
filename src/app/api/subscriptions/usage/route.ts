@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { subscriptionService } from '@/lib/services/subscriptionService'
+import { SubscriptionService } from '@/lib/services/subscriptionService'
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
       }, { status: 400 })
     }
 
-    const limitInfo = await subscriptionService.getConversationLimitInfo(userId)
+    const limitInfo = await SubscriptionService.canStartConversation(userId)
     
     return NextResponse.json({
       success: true,
@@ -42,9 +42,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user can start conversation first
-    const canStart = await subscriptionService.canStartConversation(user_id)
+    const canStart = await SubscriptionService.canStartConversation(user_id)
     
-    if (!canStart) {
+    if (!canStart.canStart) {
       return NextResponse.json({
         success: false,
         error: 'Conversation limit exceeded',
@@ -53,11 +53,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Track the usage
-    const tracked = await subscriptionService.trackConversationUsage(user_id)
+    await SubscriptionService.recordConversation(user_id)
     
     return NextResponse.json({
       success: true,
-      data: { tracked },
+      data: { tracked: true },
       message: 'Usage tracked successfully'
     })
   } catch (error) {

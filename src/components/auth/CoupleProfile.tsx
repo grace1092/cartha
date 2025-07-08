@@ -17,6 +17,7 @@ type CoupleProfileData = {
 };
 
 export const CoupleProfile = () => {
+  const supabase = createClientSupabaseClient();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [profile, setProfile] = useState<any>(null);

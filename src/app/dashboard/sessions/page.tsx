@@ -12,14 +12,8 @@ interface SessionWithClient extends TherapySession {
 
 export default function SessionsPage() {
   const [sessions, setSessions] = useState<SessionWithClient[]>([])
-
-  const supabase = createClientSupabaseClient()
   const [filteredSessions, setFilteredSessions] = useState<SessionWithClient[]>([])
-
-  const supabase = createClientSupabaseClient()
   const [loading, setLoading] = useState(true)
-
-  const supabase = createClientSupabaseClient()
   const [filter, setFilter] = useState<'all' | 'draft' | 'completed'>('all')
 
   const supabase = createClientSupabaseClient()

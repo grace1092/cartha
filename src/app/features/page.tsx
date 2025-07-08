@@ -5,7 +5,6 @@ import Outcomes from '@/components/sections/Outcomes'
 import Product from '@/components/sections/Product'
 import CompatibilityScoreSection from '@/components/sections/CompatibilityScoreSection'
 import MakeDifference from '@/components/sections/MakeDifference'
-import FinalCTA from '@/components/sections/FinalCTA'
 
 export const metadata = {
   title: 'Features - MoneyTalks Before Marriage™',
@@ -43,7 +42,6 @@ export default function Features() {
         <Product />
         <CompatibilityScoreSection />
         <MakeDifference />
-        <FinalCTA />
       </main>
       <Footer />
     </>

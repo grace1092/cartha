@@ -25,11 +25,11 @@ export default function Logo({ className = '', size = 'md' }: LogoProps) {
           <span className="text-2xl">MT</span>
         </div>
         <div className="ml-3">
-          <div className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#667eea] to-[#764ba2]">
-            MoneyTalks
-          </div>
+          <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Cartha
+          </span>
           <div className="text-sm text-gray-600">
-            Before Marriage™
+            Practice Management
           </div>
         </div>
       </div>

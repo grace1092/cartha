@@ -55,6 +55,7 @@ const dateTypes = {
 };
 
 export default function MoneyDateCalendar({ className = '' }: MoneyDateCalendarProps) {
+  const supabase = createClientSupabaseClient();
   const [moneyDates, setMoneyDates] = useState<MoneyDate[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [showScheduler, setShowScheduler] = useState(false);

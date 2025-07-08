@@ -23,6 +23,7 @@ interface PartnerConnectionProps {
 
 export default function PartnerConnection({ onInviteSent }: PartnerConnectionProps) {
   const { user, profile, refreshProfile } = useAuth();
+  const supabase = createClientSupabaseClient();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sentInvites, setSentInvites] = useState<PartnerInvite[]>([]);

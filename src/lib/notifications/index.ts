@@ -2,7 +2,9 @@ import { Twilio } from 'twilio'
 import { createTransport } from 'nodemailer'
 import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
 
-export interface NotificationPreferences {
+const supabase = createClientSupabaseClient()
+
+interface NotificationPreferences {
   sms: boolean
   email: boolean
   push: boolean
@@ -153,5 +155,4 @@ export class NotificationService {
   }
 }
 
-export { NotificationService }
-export type { NotificationPreferences, NotificationPayload } 
+export type { NotificationPayload } 

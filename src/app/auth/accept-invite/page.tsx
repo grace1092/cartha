@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/lib/context/AuthContext';
 import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
 import Button from '@/components/ui/Button';
 
-export default function AcceptInvite() {
+function AcceptInviteContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, refreshProfile } = useAuth();
@@ -169,5 +169,20 @@ export default function AcceptInvite() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AcceptInvite() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold mb-4">Loading Invitation</h2>
+          <div className="animate-pulse">Please wait...</div>
+        </div>
+      </div>
+    }>
+      <AcceptInviteContent />
+    </Suspense>
   );
 } 

@@ -1,56 +1,45 @@
-import { NextResponse } from 'next/server'
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
-import { Database } from '@/lib/supabase/database.types'
-import Stripe from 'stripe'
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16' as Stripe.LatestApiVersion,
-})
+import { NextResponse } from 'next/server';
+import Stripe from 'stripe';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+import { Database } from '@/lib/supabase/database.types';
 
 export async function POST(req: Request) {
-  try {
-    const { subscriptionId } = await req.json()
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: '2023-10-16' as Stripe.LatestApiVersion,
+  });
 
-    const cookieStore = cookies()
+  try {
+    const { subscriptionId } = await req.json();
+    const cookieStore = cookies();
+    
     const supabase = createServerClient<Database>(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         cookies: {
           get(name: string) {
-            return cookieStore.get(name)?.value
+            return cookieStore.get(name)?.value;
           },
         },
       }
-    )
+    );
 
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (!session) {
-      return new NextResponse('Unauthorized', { status: 401 });
-    }
-
-    // Get subscription to verify ownership
-    const { data: subscription } = await supabase
-      .from('subscriptions')
-      .select('stripe_subscription_id')
-      .eq('user_id', session.user.id)
-      .eq('stripe_subscription_id', subscriptionId)
-      .single();
-
-    if (!subscription) {
-      return new NextResponse('Subscription not found', { status: 404 });
-    }
-
-    // Get upcoming invoice from Stripe
-    const invoice = await stripe.invoices.retrieveUpcoming({
+    // Get the subscription to find the customer
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    
+    // Get upcoming invoice - using a different approach
+    const upcomingInvoice = await (stripe.invoices as any).retrieveUpcoming({
+      customer: subscription.customer as string,
       subscription: subscriptionId,
     });
 
-    return new NextResponse(JSON.stringify({ invoice }));
-  } catch (err) {
-    console.error('Error getting upcoming invoice:', err);
-    return new NextResponse('Error getting upcoming invoice', { status: 500 });
+    return NextResponse.json({ invoice: upcomingInvoice });
+  } catch (error) {
+    console.error('Error getting upcoming invoice:', error);
+    return NextResponse.json(
+      { error: 'Failed to get upcoming invoice' },
+      { status: 500 }
+    );
   }
 } 

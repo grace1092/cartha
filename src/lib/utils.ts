@@ -18,6 +18,65 @@ export function validateEmail(email: string): boolean {
   return emailRegex.test(email)
 }
 
+// Phone number validation
+export function validatePhoneNumber(phone: string): boolean {
+  const phoneRegex = /^\+?[1-9]\d{1,14}$/
+  return phoneRegex.test(phone)
+}
+
+// Generate invitation email content
+export function generateInvitationEmail(senderName: string, customMessage?: string): string {
+  return `
+Hi there!
+
+${senderName} has invited you to join MoneyTalks Before Marriage - a safe space for couples to have important money conversations.
+
+${customMessage ? `Personal message: "${customMessage}"` : ''}
+
+Getting started with financial discussions has never been easier. Join thousands of couples who are building stronger relationships through better money communication.
+
+Click the link below to accept the invitation and start your journey together.
+
+Best regards,
+The MoneyTalks Team
+  `.trim()
+}
+
+// Generate SMS invitation content
+export function generateSMSInvitation(senderName: string): string {
+  return `${senderName} invited you to MoneyTalks Before Marriage! Join thousands of couples building stronger relationships through better money conversations. Click to accept:`
+}
+
+// Get relationship status color
+export function getRelationshipStatusColor(status: string): string {
+  switch (status) {
+    case 'dating':
+      return 'bg-blue-100 text-blue-800'
+    case 'engaged':
+      return 'bg-purple-100 text-purple-800'
+    case 'married':
+      return 'bg-green-100 text-green-800'
+    default:
+      return 'bg-gray-100 text-gray-800'
+  }
+}
+
+// Get connection strength label
+export function getConnectionStrengthLabel(strength: number): string {
+  if (strength >= 80) return 'Strong'
+  if (strength >= 60) return 'Good'
+  if (strength >= 40) return 'Fair'
+  return 'Needs Work'
+}
+
+// Get connection strength color
+export function getConnectionStrengthColor(strength: number): string {
+  if (strength >= 80) return 'text-green-600'
+  if (strength >= 60) return 'text-blue-600'
+  if (strength >= 40) return 'text-yellow-600'
+  return 'text-red-600'
+}
+
 // Smooth scrolling
 export function scrollToElement(elementId: string) {
   const element = document.getElementById(elementId)
@@ -35,8 +94,7 @@ export function revealOnScroll() {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('animate-in')
-          entry.target.classList.remove('opacity-0', 'translate-y-8')
+          entry.target.classList.add('revealed')
         }
       })
     },
@@ -46,7 +104,7 @@ export function revealOnScroll() {
     }
   )
 
-  const elements = document.querySelectorAll('.reveal-on-scroll')
+  const elements = document.querySelectorAll('.scroll-reveal')
   elements.forEach((el) => observer.observe(el))
 
   return () => {
@@ -117,10 +175,12 @@ export const APP_CONSTANTS = {
   USERS_COUNT: '10,000+',
   THERAPISTS_COUNT: '5,000+',
   SESSIONS_COUNT: '100,000+',
+  CARD_COUNT: '150+',
   PRICE: '$29/month',
   SOCIAL_LINKS: {
     TWITTER: 'https://twitter.com/cartha',
     LINKEDIN: 'https://linkedin.com/company/cartha',
+    INSTAGRAM: 'https://instagram.com/cartha',
     EMAIL: 'hello@cartha.com',
   },
   FEATURES: {

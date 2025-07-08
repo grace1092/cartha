@@ -75,6 +75,7 @@ const goalCategories = {
 };
 
 export default function GoalTrackingDashboard({ className = '' }: GoalTrackingDashboardProps) {
+  const supabase = createClientSupabaseClient();
   const [goals, setGoals] = useState<FinancialGoal[]>([]);
   const [showAddGoal, setShowAddGoal] = useState(false);
   const [editingGoal, setEditingGoal] = useState<FinancialGoal | null>(null);
@@ -171,11 +172,12 @@ export default function GoalTrackingDashboard({ className = '' }: GoalTrackingDa
 
   const updateGoalProgress = async (goalId: string, newAmount: number) => {
     try {
+      const goal = goals.find(g => g.id === goalId);
       const { error } = await supabase
         .from('financial_goals')
         .update({ 
           current_amount: newAmount,
-          status: newAmount >= goals.find(g => g.id === goalId)?.target_amount ? 'completed' : 'active'
+          status: goal && newAmount >= goal.target_amount ? 'completed' : 'active'
         })
         .eq('id', goalId);
 

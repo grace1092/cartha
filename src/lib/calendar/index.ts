@@ -2,6 +2,8 @@ import { google } from 'googleapis'
 import { createClient } from '@supabase/supabase-js'
 import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
 
+const supabase = createClientSupabaseClient()
+
 interface CalendarSlot {
   start: Date
   end: Date
@@ -117,6 +119,7 @@ export class CalendarIntegration {
           const slotEnd = new Date(current.getTime() + duration * 60 * 1000)
           const isAvailable = !busySlots.some(
             (busy) =>
+              busy.start && busy.end && 
               new Date(busy.start) <= current && new Date(busy.end) >= slotEnd
           )
 
@@ -177,7 +180,7 @@ export class CalendarIntegration {
             dateTime: new Date(date.getTime() + 15 * 60 * 1000).toISOString(), // 15 minutes
             timeZone: userTimeZone,
           },
-          attendees: couple?.partner ? [{ email: couple.partner.email }] : undefined,
+          attendees: couple?.partner && Array.isArray(couple.partner) ? [{ email: couple.partner[0]?.email }] : undefined,
           reminders: {
             useDefault: false,
             overrides: [

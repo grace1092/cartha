@@ -3,11 +3,6 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import OpenAI from 'openai';
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 // System prompts for different tiers
 const FREE_TIER_PROMPT = `You are a helpful financial conversation guide for couples. Provide supportive, general advice about money discussions. Keep responses conversational and practical.
 
@@ -194,6 +189,11 @@ export async function POST(request: Request) {
 User Name: ${profile.full_name || 'User'}
 Relationship Status: ${profile.relationship_status || 'Not specified'}
 ` : '';
+
+    // Initialize OpenAI client
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
 
     // Generate AI response using appropriate tier
     const systemPrompt = isFreeTier ? FREE_TIER_PROMPT : PREMIUM_TIER_PROMPT;

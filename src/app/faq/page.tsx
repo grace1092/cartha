@@ -1,7 +1,6 @@
 import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
 import FAQ from '@/components/sections/FAQ'
-import FinalCTA from '@/components/sections/FinalCTA'
 
 export const metadata = {
   title: 'FAQ - MoneyTalks Before Marriage™',
@@ -35,7 +34,6 @@ export default function FAQPage() {
         </section>
 
         <FAQ />
-        <FinalCTA />
       </main>
       <Footer />
     </>
