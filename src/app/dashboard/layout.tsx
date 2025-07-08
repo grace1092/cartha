@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
+import { createServerSupabaseClient } from '@/lib/supabase/serverClient'
 import { Profile } from '@/lib/types/database'
 
 interface DashboardLayoutProps {
@@ -18,7 +18,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
 
-  const supabase = createClientSupabaseClient()
+  const supabase = createServerSupabaseClient()
 
   useEffect(() => {
     const fetchProfile = async () => {
