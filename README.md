@@ -271,3 +271,4 @@ Access these analytics through the `session_analytics` table in your database.
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
