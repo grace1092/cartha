@@ -24,10 +24,10 @@ export default function Hero() {
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 opacity-0 animate-fade-in-delay-2">
             <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-5 rounded-xl text-xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 flex items-center gap-3 shadow-xl hover:shadow-2xl hover:scale-105 transform">
-              Get Private Demo <Crown className="w-6 h-6" />
+              Get Private Demo
             </button>
             <button className="bg-white border-2 border-gray-300 text-gray-700 px-10 py-5 rounded-xl text-xl font-bold hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl hover:scale-105 transform">
-              See Features <Gift className="w-6 h-6" />
+              See Features
             </button>
           </div>
 
