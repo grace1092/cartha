@@ -1,87 +1,145 @@
 'use client'
 
-import { useEffect } from 'react'
-import { Users, Clock, Star, TrendingUp } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Crown, Lock, Gift, Users, Clock, Star, TrendingUp } from 'lucide-react'
 import { revealOnScroll } from '@/lib/utils'
 
 export default function Stats() {
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  })
+
   useEffect(() => {
     revealOnScroll()
+    
+    // Set deadline to 7 days from now
+    const deadline = new Date()
+    deadline.setDate(deadline.getDate() + 7)
+    
+    const timer = setInterval(() => {
+      const now = new Date().getTime()
+      const distance = deadline.getTime() - now
+      
+      if (distance > 0) {
+        setTimeLeft({
+          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((distance % (1000 * 60)) / 1000)
+        })
+      }
+    }, 1000)
+    
+    return () => clearInterval(timer)
   }, [])
 
-  const stats = [
+  const foundingMemberBenefits = [
+    {
+      icon: Crown,
+      title: '30% Lifetime Discount',
+      description: 'Lock in the founding member rate forever'
+    },
+    {
+      icon: Gift,
+      title: '3 Invite Codes',
+      description: 'Share with colleagues and earn rewards'
+    },
     {
       icon: Users,
-      number: '500+',
-      label: 'Therapists',
-      description: 'Trust Cartha to manage their practice'
+      title: 'Exclusive Community',
+      description: 'Access to founding member network'
     },
     {
-      icon: Clock,
-      number: '10,000+',
-      label: 'Sessions',
-      description: 'Successfully managed this month'
-    },
-    {
-      icon: Star,
-      number: '95%',
-      label: 'Satisfaction',
-      description: 'Client satisfaction rate'
-    },
-    {
-      icon: TrendingUp,
-      number: '40%',
-      label: 'Time Saved',
-      description: 'Average time saved per session'
+      icon: Lock,
+      title: 'Early Access',
+      description: 'Be first to try new features'
     }
   ]
 
   return (
-    <section className="py-20 lg:py-28 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <section className="py-20 lg:py-28 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
       <div className="container-modern">
-        {/* Section Header */}
+        {/* Founding Member Countdown */}
         <div className="text-center mb-16">
           <div className="scroll-reveal">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              Trusted by therapists nationwide
-            </h2>
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <Crown className="w-10 h-10 text-yellow-500" />
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
+                Founding Member Access
+              </h2>
+              <Lock className="w-8 h-8 text-purple-600" />
+            </div>
           </div>
           <div className="scroll-reveal" style={{ animationDelay: '0.2s' }}>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Join hundreds of mental health professionals who have transformed their practice with Cartha
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+              Join the first 100 therapists and secure exclusive benefits that will never be offered again
             </p>
+          </div>
+          
+          {/* Countdown Timer */}
+          <div className="scroll-reveal" style={{ animationDelay: '0.4s' }}>
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 mb-8 text-white">
+              <h3 className="text-2xl font-bold mb-4">Limited Time Offer Ends In:</h3>
+              <div className="flex justify-center gap-4 md:gap-8">
+                <div className="text-center">
+                  <div className="text-3xl md:text-4xl font-bold bg-white/20 rounded-lg px-4 py-2">
+                    {timeLeft.days}
+                  </div>
+                  <div className="text-sm mt-2">Days</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl md:text-4xl font-bold bg-white/20 rounded-lg px-4 py-2">
+                    {timeLeft.hours}
+                  </div>
+                  <div className="text-sm mt-2">Hours</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl md:text-4xl font-bold bg-white/20 rounded-lg px-4 py-2">
+                    {timeLeft.minutes}
+                  </div>
+                  <div className="text-sm mt-2">Minutes</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl md:text-4xl font-bold bg-white/20 rounded-lg px-4 py-2">
+                    {timeLeft.seconds}
+                  </div>
+                  <div className="text-sm mt-2">Seconds</div>
+                </div>
+              </div>
+              <div className="mt-6 text-center">
+                <span className="text-yellow-300 font-bold text-lg">87/100 Seats Remaining</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {stats.map((stat, index) => {
-            const IconComponent = stat.icon
+        {/* Founding Member Benefits */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+          {foundingMemberBenefits.map((benefit, index) => {
+            const IconComponent = benefit.icon
             return (
               <div
-                key={stat.label}
+                key={benefit.title}
                 className="scroll-reveal group"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 h-full text-center">
                   {/* Icon */}
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     <IconComponent className="w-8 h-8 text-white" />
                   </div>
 
-                  {/* Number */}
-                  <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-300">
-                    {stat.number}
-                  </div>
-
-                  {/* Label */}
-                  <div className="text-lg font-semibold text-gray-700 mb-3">
-                    {stat.label}
+                  {/* Title */}
+                  <div className="text-lg font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors duration-300">
+                    {benefit.title}
                   </div>
 
                   {/* Description */}
                   <div className="text-gray-600 text-sm leading-relaxed">
-                    {stat.description}
+                    {benefit.description}
                   </div>
                 </div>
               </div>
@@ -89,24 +147,21 @@ export default function Stats() {
           })}
         </div>
 
-        {/* Trust Indicators */}
-        <div className="mt-16 text-center">
-          <div className="scroll-reveal" style={{ animationDelay: '0.4s' }}>
-            <p className="text-gray-600 mb-8">
-              Trusted by leading mental health organizations
-            </p>
-            <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-              <div className="bg-white px-6 py-3 rounded-lg shadow-sm">
-                <span className="text-sm font-semibold text-gray-700">HIPAA Compliant</span>
-              </div>
-              <div className="bg-white px-6 py-3 rounded-lg shadow-sm">
-                <span className="text-sm font-semibold text-gray-700">SOC 2 Type II</span>
-              </div>
-              <div className="bg-white px-6 py-3 rounded-lg shadow-sm">
-                <span className="text-sm font-semibold text-gray-700">256-bit SSL</span>
-              </div>
-              <div className="bg-white px-6 py-3 rounded-lg shadow-sm">
-                <span className="text-sm font-semibold text-gray-700">GDPR Ready</span>
+        {/* CTA Section */}
+        <div className="text-center">
+          <div className="scroll-reveal" style={{ animationDelay: '0.6s' }}>
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-white">
+              <h3 className="text-2xl font-bold mb-4">Ready to Join the Founding Members?</h3>
+              <p className="text-lg mb-6 opacity-90">
+                Secure your 30% lifetime discount and exclusive benefits before time runs out
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button className="bg-white text-purple-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl">
+                  Get 30% Off For Life <Crown className="w-5 h-5" />
+                </button>
+                <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-bold hover:bg-white hover:text-purple-600 transition-all duration-300 flex items-center gap-3">
+                  3 Invite Codes <Gift className="w-5 h-5" />
+                </button>
               </div>
             </div>
           </div>

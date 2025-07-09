@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { APP_CONSTANTS, revealOnScroll } from '@/lib/utils'
-import { ArrowRight, Shield, Lock, CheckCircle } from 'lucide-react'
+import { ArrowRight, Shield, Lock, CheckCircle, Crown, Gift, Users } from 'lucide-react'
 
 export default function Hero() {
   useEffect(() => {
@@ -24,15 +24,41 @@ export default function Hero() {
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 opacity-0 animate-fade-in-delay-2">
             <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-5 rounded-xl text-xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 flex items-center gap-3 shadow-xl hover:shadow-2xl hover:scale-105 transform">
-              Start Your Free Trial <ArrowRight className="w-6 h-6" />
+              Get 30% Off For Life <Crown className="w-6 h-6" />
             </button>
             <button className="bg-white border-2 border-gray-300 text-gray-700 px-10 py-5 rounded-xl text-xl font-bold hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl hover:scale-105 transform">
-              Watch Demo <span className="ml-1">😊</span>
+              3 Invite Codes <Gift className="w-6 h-6" />
             </button>
           </div>
 
+          {/* Founding Member Exclusive Section */}
+          <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 mb-8 opacity-0 animate-fade-in-delay-3">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Crown className="w-8 h-8 text-yellow-300" />
+              <h3 className="text-2xl font-bold text-white">Founding Member Exclusive</h3>
+              <Lock className="w-6 h-6 text-yellow-300" />
+            </div>
+            <p className="text-white/90 text-lg mb-6 max-w-2xl mx-auto">
+              Join the first 100 therapists and lock in 30% off for life. Plus get 3 invite codes for your colleagues.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-white">
+              <div className="flex items-center gap-2">
+                <Users className="w-5 h-5" />
+                <span className="font-semibold">87/100 Seats Left</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Gift className="w-5 h-5" />
+                <span className="font-semibold">30% Lifetime Discount</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Shield className="w-5 h-5" />
+                <span className="font-semibold">Early Access</span>
+              </div>
+            </div>
+          </div>
+
           {/* Security Badges */}
-          <div className="flex flex-wrap justify-center items-center gap-8 opacity-0 animate-fade-in-delay-3">
+          <div className="flex flex-wrap justify-center items-center gap-8 opacity-0 animate-fade-in-delay-4">
             <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-lg shadow-md">
               <Shield className="w-5 h-5 text-green-600" />
               <span className="text-sm font-semibold text-gray-700">HIPAA Compliant</span>
@@ -75,6 +101,10 @@ export default function Hero() {
         
         .animate-fade-in-delay-3 {
           animation: fadeIn 0.8s ease-out 0.6s forwards;
+        }
+        
+        .animate-fade-in-delay-4 {
+          animation: fadeIn 0.8s ease-out 0.8s forwards;
         }
       `}</style>
     </section>
