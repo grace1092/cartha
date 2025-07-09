@@ -24,10 +24,14 @@ import {
   Zap,
   Brain,
   MessageSquare,
-  AlertCircle
+  AlertCircle,
+  FolderOpen
 } from 'lucide-react'
+import { useSessionNotes } from '@/lib/context/SessionNotesContext'
+import MySessions from './MySessions'
 
 export default function AISessionNotesDashboard() {
+  const { addSession, getRecentSessions } = useSessionNotes()
   const [isRecording, setIsRecording] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
@@ -39,6 +43,9 @@ export default function AISessionNotesDashboard() {
   const [recordingTime, setRecordingTime] = useState(0)
   const [isTranscribing, setIsTranscribing] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [showMySessions, setShowMySessions] = useState(false)
+  const [clientName, setClientName] = useState('')
+  const [sessionDuration, setSessionDuration] = useState('00:15:00')
 
   const workflowSteps = [
     {
@@ -186,6 +193,20 @@ export default function AISessionNotesDashboard() {
   const completeWorkflow = () => {
     setCurrentStep(4)
     setTimeout(() => {
+      // Save the session to storage
+      if (aiAnalysis && transcription) {
+        const sessionData = {
+          date: new Date().toISOString(),
+          clientName: clientName || 'Anonymous Client',
+          sessionDuration: sessionDuration,
+          transcription: transcription,
+          aiAnalysis: aiAnalysis,
+          selectedTemplate: selectedTemplate,
+          templateName: templates.find(t => t.id === selectedTemplate)?.name || 'Custom Template',
+          status: 'completed' as const
+        }
+        addSession(sessionData)
+      }
       setShowDashboard(true)
     }, 1000)
   }
@@ -197,6 +218,37 @@ export default function AISessionNotesDashboard() {
           <div className="bg-blue-50 rounded-lg p-6">
             <h4 className="font-semibold text-blue-900 mb-4">Voice Recording Demo</h4>
             <div className="space-y-4">
+              {/* Client Information */}
+              <div className="bg-white rounded-lg p-4 border">
+                <h5 className="font-medium text-gray-900 mb-3">Session Information</h5>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Client Name
+                    </label>
+                    <input
+                      type="text"
+                      value={clientName}
+                      onChange={(e) => setClientName(e.target.value)}
+                      placeholder="Enter client name"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Session Duration
+                    </label>
+                    <input
+                      type="text"
+                      value={sessionDuration}
+                      onChange={(e) => setSessionDuration(e.target.value)}
+                      placeholder="00:15:00"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+              </div>
+
               <div className="flex items-center space-x-4">
                 <div className={`w-16 h-16 rounded-full flex items-center justify-center ${
                   isRecording ? 'bg-red-500 animate-pulse' : 'bg-gray-300'
@@ -696,12 +748,21 @@ export default function AISessionNotesDashboard() {
               <h2 className="text-2xl font-bold text-gray-900">AI Session Notes Dashboard</h2>
               <p className="text-gray-600">Experience how AI transforms your documentation workflow</p>
             </div>
-            <button 
-              onClick={() => setShowDashboard(false)}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => setShowMySessions(true)}
+                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <FolderOpen className="w-4 h-4" />
+                <span>My Sessions</span>
+              </button>
+              <button 
+                onClick={() => setShowDashboard(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -863,6 +924,11 @@ export default function AISessionNotesDashboard() {
           </div>
         </div>
       </div>
+
+      {/* My Sessions Modal */}
+      {showMySessions && (
+        <MySessions />
+      )}
     </div>
   )
 } 
