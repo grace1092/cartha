@@ -216,7 +216,7 @@ export default function SecurityDashboard() {
                         </div>
                         <div className="text-right">
                           <div className="text-sm font-medium text-gray-900 capitalize">{value.status}</div>
-                          <div className="text-xs text-gray-600">Next: {value.nextAudit || value.nextCheck}</div>
+                          <div className="text-xs text-gray-600">Next: {'nextAudit' in value ? value.nextAudit : value.nextCheck}</div>
                         </div>
                       </div>
                     ))}
@@ -317,7 +317,7 @@ export default function SecurityDashboard() {
                         </div>
                       </div>
                       <div className="text-sm text-gray-600 space-y-1">
-                        <p><strong>Algorithm/Protocol:</strong> {value.algorithm || value.protocol}</p>
+                        <p><strong>Algorithm/Protocol:</strong> {'algorithm' in value ? value.algorithm : value.protocol}</p>
                         <p><strong>Last Updated:</strong> {value.lastUpdated}</p>
                       </div>
                     </div>
