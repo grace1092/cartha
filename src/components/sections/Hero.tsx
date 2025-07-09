@@ -44,7 +44,7 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-white">
               <div className="flex items-center gap-2">
                 <Users className="w-5 h-5" />
-                <span className="font-semibold">87/100 Seats Left</span>
+                <span className="font-semibold">87/500 Seats Left</span>
               </div>
               <div className="flex items-center gap-2">
                 <Gift className="w-5 h-5" />

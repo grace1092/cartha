@@ -75,7 +75,7 @@ export default function Stats() {
           </div>
           <div className="scroll-reveal" style={{ animationDelay: '0.2s' }}>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-              Join the first 100 therapists and secure exclusive benefits that will never be offered again
+              Join the first 500 therapists and secure exclusive benefits that will never be offered again
             </p>
           </div>
           
@@ -110,7 +110,7 @@ export default function Stats() {
                 </div>
               </div>
               <div className="mt-6 text-center">
-                <span className="text-yellow-300 font-bold text-lg">87/100 Seats Remaining</span>
+                <span className="text-yellow-300 font-bold text-lg">87/500 Seats Remaining</span>
               </div>
             </div>
           </div>
