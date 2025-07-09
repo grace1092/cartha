@@ -18,8 +18,13 @@ import {
   Star
 } from 'lucide-react';
 
-export default function PracticeAnalyticsDashboard() {
+interface PracticeAnalyticsDashboardProps {
+  onClose: () => void;
+}
+
+export default function PracticeAnalyticsDashboard({ onClose }: PracticeAnalyticsDashboardProps) {
   const [activeTab, setActiveTab] = useState('overview');
+  const [selectedWorkflowStep, setSelectedWorkflowStep] = useState<string | null>(null);
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: BarChart3 },
@@ -78,7 +83,7 @@ export default function PracticeAnalyticsDashboard() {
               <p className="text-blue-100 mt-1">Data-driven insights for practice growth</p>
             </div>
             <button
-              onClick={() => window.history.back()}
+              onClick={onClose}
               className="text-white hover:text-blue-100 transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -214,6 +219,76 @@ export default function PracticeAnalyticsDashboard() {
                   ))}
                 </div>
               </div>
+
+              {/* Interactive Analytics Workflow */}
+              <div className="bg-white p-6 rounded-xl border border-gray-200">
+                <h3 className="text-lg font-semibold mb-4">Analytics Workflow</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {[
+                    {
+                      id: 'data-collection',
+                      title: 'Data Collection',
+                      icon: Activity,
+                      description: 'Automated data gathering from sessions, billing, and client interactions',
+                      details: 'Real-time collection of session notes, billing data, client outcomes, and engagement metrics. Integrates with your existing systems seamlessly.'
+                    },
+                    {
+                      id: 'analysis',
+                      title: 'AI Analysis',
+                      icon: BarChart3,
+                      description: 'Advanced analytics identify patterns and opportunities',
+                      details: 'Machine learning algorithms analyze trends, predict outcomes, and identify revenue optimization opportunities. Provides actionable insights.'
+                    },
+                    {
+                      id: 'insights',
+                      title: 'Smart Insights',
+                      icon: Target,
+                      description: 'Personalized recommendations for practice growth',
+                      details: 'AI-powered recommendations for client retention, billing optimization, and service expansion. Tailored to your specific practice needs.'
+                    },
+                    {
+                      id: 'action',
+                      title: 'Take Action',
+                      icon: TrendingUp,
+                      description: 'Implement changes and track improvements',
+                      details: 'Step-by-step action plans with progress tracking. Monitor the impact of changes and see real-time improvements in your practice metrics.'
+                    }
+                  ].map((step) => {
+                    const Icon = step.icon;
+                    return (
+                      <div key={step.id}>
+                        <button
+                          onClick={() => setSelectedWorkflowStep(selectedWorkflowStep === step.id ? null : step.id)}
+                          className={`w-full p-4 rounded-lg border-2 transition-all duration-300 text-left ${
+                            selectedWorkflowStep === step.id
+                              ? 'border-blue-500 bg-blue-50 shadow-lg'
+                              : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-3 mb-3">
+                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                              selectedWorkflowStep === step.id
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-gray-100 text-gray-600'
+                            }`}>
+                              <Icon className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-gray-900">{step.title}</h4>
+                              <p className="text-sm text-gray-600">{step.description}</p>
+                            </div>
+                          </div>
+                          {selectedWorkflowStep === step.id && (
+                            <div className="mt-3 p-3 bg-white rounded border border-gray-200">
+                              <p className="text-sm text-gray-700 leading-relaxed">{step.details}</p>
+                            </div>
+                          )}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           )}
 
@@ -224,36 +299,36 @@ export default function PracticeAnalyticsDashboard() {
                 <div className="bg-white p-6 rounded-xl border border-gray-200">
                   <h3 className="text-lg font-semibold mb-4">Revenue by Service Type</h3>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                        <span className="font-medium">Individual Therapy</span>
+                    {[
+                      { type: 'Individual Therapy', revenue: 42300, percentage: 70.7, color: 'bg-blue-500', details: 'Core therapy sessions with individual clients. High demand service with consistent revenue stream.' },
+                      { type: 'Couples Therapy', revenue: 12500, percentage: 20.9, color: 'bg-purple-500', details: 'Specialized sessions for couples. Growing market with premium pricing potential.' },
+                      { type: 'Group Sessions', revenue: 5000, percentage: 8.4, color: 'bg-green-500', details: 'Group therapy and workshops. Efficient use of time with multiple clients per session.' }
+                    ].map((service, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedWorkflowStep(selectedWorkflowStep === `service-${index}` ? null : `service-${index}`)}
+                        className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className={`w-3 h-3 ${service.color} rounded-full`}></div>
+                          <span className="font-medium text-left">{service.type}</span>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-semibold">${service.revenue.toLocaleString()}</div>
+                          <div className="text-sm text-gray-500">{service.percentage}%</div>
+                        </div>
+                      </button>
+                    ))}
+                    {/* Show details when service is selected */}
+                    {selectedWorkflowStep && selectedWorkflowStep.startsWith('service-') && (
+                      <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <p className="text-sm text-blue-800 leading-relaxed">
+                          {selectedWorkflowStep === 'service-0' && 'Core therapy sessions with individual clients. High demand service with consistent revenue stream.'}
+                          {selectedWorkflowStep === 'service-1' && 'Specialized sessions for couples. Growing market with premium pricing potential.'}
+                          {selectedWorkflowStep === 'service-2' && 'Group therapy and workshops. Efficient use of time with multiple clients per session.'}
+                        </p>
                       </div>
-                      <div className="text-right">
-                        <div className="font-semibold">$42,300</div>
-                        <div className="text-sm text-gray-500">70.7%</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-                        <span className="font-medium">Couples Therapy</span>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-semibold">$12,500</div>
-                        <div className="text-sm text-gray-500">20.9%</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                        <span className="font-medium">Group Sessions</span>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-semibold">$5,000</div>
-                        <div className="text-sm text-gray-500">8.4%</div>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 
@@ -261,36 +336,66 @@ export default function PracticeAnalyticsDashboard() {
                 <div className="bg-white p-6 rounded-xl border border-gray-200">
                   <h3 className="text-lg font-semibold mb-4">Revenue Growth Analysis</h3>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                      <div>
-                        <p className="font-medium text-green-900">New Client Revenue</p>
-                        <p className="text-sm text-green-600">+23 new clients this month</p>
+                    {[
+                      {
+                        id: 'new-clients',
+                        title: 'New Client Revenue',
+                        subtitle: '+23 new clients this month',
+                        amount: '+$7,050',
+                        percentage: '+13.4%',
+                        bgColor: 'bg-green-50',
+                        textColor: 'text-green-900',
+                        subtitleColor: 'text-green-600',
+                        details: 'Strong growth in new client acquisition through improved marketing and referral programs. Average new client value: $307 per session.'
+                      },
+                      {
+                        id: 'existing-clients',
+                        title: 'Existing Client Revenue',
+                        subtitle: 'Increased session frequency',
+                        amount: '+$3,200',
+                        percentage: '+5.7%',
+                        bgColor: 'bg-blue-50',
+                        textColor: 'text-blue-900',
+                        subtitleColor: 'text-blue-600',
+                        details: 'Existing clients are booking more frequent sessions and longer appointments. Client retention strategies are working effectively.'
+                      },
+                      {
+                        id: 'premium-services',
+                        title: 'Premium Services',
+                        subtitle: 'Extended sessions & assessments',
+                        amount: '+$1,550',
+                        percentage: '+8.2%',
+                        bgColor: 'bg-purple-50',
+                        textColor: 'text-purple-900',
+                        subtitleColor: 'text-purple-600',
+                        details: 'Premium services including extended sessions, assessments, and specialized programs are gaining popularity and driving higher revenue per client.'
+                      }
+                    ].map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => setSelectedWorkflowStep(selectedWorkflowStep === item.id ? null : item.id)}
+                        className={`w-full flex items-center justify-between p-3 ${item.bgColor} rounded-lg hover:shadow-md transition-all duration-200`}
+                      >
+                        <div>
+                          <p className={`font-medium ${item.textColor}`}>{item.title}</p>
+                          <p className={`text-sm ${item.subtitleColor}`}>{item.subtitle}</p>
+                        </div>
+                        <div className="text-right">
+                          <div className={`font-bold ${item.subtitleColor}`}>{item.amount}</div>
+                          <div className={`text-sm ${item.subtitleColor}`}>{item.percentage}</div>
+                        </div>
+                      </button>
+                    ))}
+                    {/* Show details when growth item is selected */}
+                    {selectedWorkflowStep && ['new-clients', 'existing-clients', 'premium-services'].includes(selectedWorkflowStep) && (
+                      <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <p className="text-sm text-gray-700 leading-relaxed">
+                          {selectedWorkflowStep === 'new-clients' && 'Strong growth in new client acquisition through improved marketing and referral programs. Average new client value: $307 per session.'}
+                          {selectedWorkflowStep === 'existing-clients' && 'Existing clients are booking more frequent sessions and longer appointments. Client retention strategies are working effectively.'}
+                          {selectedWorkflowStep === 'premium-services' && 'Premium services including extended sessions, assessments, and specialized programs are gaining popularity and driving higher revenue per client.'}
+                        </p>
                       </div>
-                      <div className="text-right">
-                        <div className="font-bold text-green-600">+$7,050</div>
-                        <div className="text-sm text-green-600">+13.4%</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                      <div>
-                        <p className="font-medium text-blue-900">Existing Client Revenue</p>
-                        <p className="text-sm text-blue-600">Increased session frequency</p>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-bold text-blue-600">+$3,200</div>
-                        <div className="text-sm text-blue-600">+5.7%</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                      <div>
-                        <p className="font-medium text-purple-900">Premium Services</p>
-                        <p className="text-sm text-purple-600">Extended sessions & assessments</p>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-bold text-purple-600">+$1,550</div>
-                        <div className="text-sm text-purple-600">+8.2%</div>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -302,7 +407,11 @@ export default function PracticeAnalyticsDashboard() {
               {/* Outcome Metrics */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {outcomeMetrics.map((metric, index) => (
-                  <div key={index} className="bg-white p-6 rounded-xl border border-gray-200">
+                  <button
+                    key={index}
+                    onClick={() => setSelectedWorkflowStep(selectedWorkflowStep === `metric-${index}` ? null : `metric-${index}`)}
+                    className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg transition-all duration-300 text-left"
+                  >
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="font-semibold text-gray-900">{metric.metric}</h3>
                       <div className={`flex items-center text-sm ${
@@ -323,7 +432,18 @@ export default function PracticeAnalyticsDashboard() {
                         style={{ width: `${parseInt(metric.value)}%` }}
                       ></div>
                     </div>
-                  </div>
+                    {/* Show details when metric is selected */}
+                    {selectedWorkflowStep === `metric-${index}` && (
+                      <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <p className="text-sm text-blue-800 leading-relaxed">
+                          {index === 0 && 'Treatment success rate measures the percentage of clients who achieve their primary therapy goals. This metric has improved by 5% due to enhanced treatment planning and progress tracking.'}
+                          {index === 1 && 'Client retention rate shows how many clients continue therapy beyond their initial sessions. The 3% improvement reflects better engagement strategies and personalized care approaches.'}
+                          {index === 2 && 'Average session rating from client feedback surveys. The 0.2 point increase indicates higher client satisfaction with therapy quality and outcomes.'}
+                          {index === 3 && 'Goal achievement rate tracks how many clients reach their specific therapy objectives. The 8% improvement shows more effective goal-setting and progress monitoring.'}
+                        </p>
+                      </div>
+                    )}
+                  </button>
                 ))}
               </div>
 

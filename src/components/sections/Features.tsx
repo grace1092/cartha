@@ -237,7 +237,7 @@ export default function Features() {
 
       {/* Practice Analytics Dashboard Modal */}
       {showAnalyticsDashboard && (
-        <PracticeAnalyticsDashboard />
+        <PracticeAnalyticsDashboard onClose={() => setShowAnalyticsDashboard(false)} />
       )}
     </>
   )
