@@ -18,12 +18,14 @@ import AISessionNotesDashboard from './AISessionNotesDashboard'
 import FollowUpAutomationDashboard from './FollowUpAutomationDashboard'
 import ClientManagementDashboard from './ClientManagementDashboard'
 import SecurityDashboard from './SecurityDashboard'
+import SmartSchedulingDashboard from './SmartSchedulingDashboard'
 
 export default function Features() {
   const [showAIDashboard, setShowAIDashboard] = useState(false)
   const [showFollowUpDashboard, setShowFollowUpDashboard] = useState(false)
   const [showClientDashboard, setShowClientDashboard] = useState(false)
   const [showSecurityDashboard, setShowSecurityDashboard] = useState(false)
+  const [showSchedulingDashboard, setShowSchedulingDashboard] = useState(false)
 
   useEffect(() => {
     revealOnScroll()
@@ -96,7 +98,9 @@ export default function Features() {
         'Automated reminders',
         'Calendar integration',
         'Waitlist management'
-      ]
+      ],
+      hasDashboard: true,
+      dashboardType: 'scheduling'
     },
     {
       icon: BarChart3,
@@ -122,6 +126,8 @@ export default function Features() {
         setShowClientDashboard(true)
       } else if (feature.dashboardType === 'security') {
         setShowSecurityDashboard(true)
+      } else if (feature.dashboardType === 'scheduling') {
+        setShowSchedulingDashboard(true)
       }
     }
   }
@@ -216,6 +222,11 @@ export default function Features() {
       {/* Security Dashboard Modal */}
       {showSecurityDashboard && (
         <SecurityDashboard />
+      )}
+
+      {/* Smart Scheduling Dashboard Modal */}
+      {showSchedulingDashboard && (
+        <SmartSchedulingDashboard />
       )}
     </>
   )
