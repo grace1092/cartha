@@ -147,25 +147,8 @@ export default function Stats() {
           })}
         </div>
 
-        {/* CTA Section */}
-        <div className="text-center">
-          <div className="scroll-reveal" style={{ animationDelay: '0.6s' }}>
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-white">
-              <h3 className="text-2xl font-bold mb-4">Ready to Join the Founding Members?</h3>
-              <p className="text-lg mb-6 opacity-90">
-                Secure your 30% lifetime discount and exclusive benefits before time runs out
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-white text-purple-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-100 transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl">
-                  Get 30% Off For Life <Crown className="w-5 h-5" />
-                </button>
-                <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl font-bold hover:bg-white hover:text-purple-600 transition-all duration-300 flex items-center gap-3">
-                  3 Invite Codes <Gift className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Removed the CTA section as requested */}
+
       </div>
     </section>
   )
