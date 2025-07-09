@@ -19,6 +19,7 @@ import FollowUpAutomationDashboard from './FollowUpAutomationDashboard'
 import ClientManagementDashboard from './ClientManagementDashboard'
 import SecurityDashboard from './SecurityDashboard'
 import SmartSchedulingDashboard from './SmartSchedulingDashboard'
+import PracticeAnalyticsDashboard from './PracticeAnalyticsDashboard'
 
 export default function Features() {
   const [showAIDashboard, setShowAIDashboard] = useState(false)
@@ -26,6 +27,7 @@ export default function Features() {
   const [showClientDashboard, setShowClientDashboard] = useState(false)
   const [showSecurityDashboard, setShowSecurityDashboard] = useState(false)
   const [showSchedulingDashboard, setShowSchedulingDashboard] = useState(false)
+  const [showAnalyticsDashboard, setShowAnalyticsDashboard] = useState(false)
 
   useEffect(() => {
     revealOnScroll()
@@ -112,7 +114,9 @@ export default function Features() {
         'Client outcome tracking',
         'Practice performance metrics',
         'Custom report generation'
-      ]
+      ],
+      hasDashboard: true,
+      dashboardType: 'analytics'
     }
   ]
 
@@ -128,6 +132,8 @@ export default function Features() {
         setShowSecurityDashboard(true)
       } else if (feature.dashboardType === 'scheduling') {
         setShowSchedulingDashboard(true)
+      } else if (feature.dashboardType === 'analytics') {
+        setShowAnalyticsDashboard(true)
       }
     }
   }
@@ -227,6 +233,11 @@ export default function Features() {
       {/* Smart Scheduling Dashboard Modal */}
       {showSchedulingDashboard && (
         <SmartSchedulingDashboard />
+      )}
+
+      {/* Practice Analytics Dashboard Modal */}
+      {showAnalyticsDashboard && (
+        <PracticeAnalyticsDashboard />
       )}
     </>
   )
