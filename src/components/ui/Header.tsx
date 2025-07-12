@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 import { APP_CONSTANTS, scrollToElement } from '@/lib/utils'
 import { useAuth } from '@/lib/context/AuthContext'
 import { User, LogOut } from 'lucide-react'
@@ -12,6 +13,11 @@ export default function Header() {
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [authModalType, setAuthModalType] = useState<'signin' | 'signup'>('signin')
   const { user, signOut } = useAuth()
+  const router = useRouter()
+  const pathname = usePathname()
+
+  // Check if we're on the main page
+  const isMainPage = pathname === '/'
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,8 +29,24 @@ export default function Header() {
   }, [])
 
   const handleNavClick = (elementId: string) => {
-    scrollToElement(elementId)
+    if (isMainPage) {
+      // On main page, scroll to section
+      scrollToElement(elementId)
+    } else {
+      // On other pages, navigate to home page and scroll to section
+      router.push(`/#${elementId}`)
+    }
     setIsMobileMenuOpen(false)
+  }
+
+  const handleLogoClick = () => {
+    if (isMainPage) {
+      // On main page, scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      // On other pages, navigate to home page
+      router.push('/')
+    }
   }
 
   const handleSignIn = () => {
@@ -50,14 +72,17 @@ export default function Header() {
       <nav className="container-modern">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <div className="flex items-center space-x-3">
+          <button 
+            onClick={handleLogoClick}
+            className="flex items-center space-x-3 hover:opacity-80 transition-opacity cursor-pointer"
+          >
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center">
               <span className="text-white font-bold text-lg">C</span>
             </div>
             <span className="text-2xl font-bold gradient-text">
               {APP_CONSTANTS.APP_NAME}
             </span>
-          </div>
+          </button>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -202,7 +227,7 @@ export default function Header() {
                     </button>
                   </div>
                 ) : (
-                  <>
+                  <div className="space-y-3">
                     <button 
                       onClick={handleSignIn}
                       className="btn-secondary w-full text-sm"
@@ -215,7 +240,7 @@ export default function Header() {
                     >
                       Start Free Trial
                     </button>
-                  </>
+                  </div>
                 )}
               </div>
             </div>
@@ -224,13 +249,11 @@ export default function Header() {
       </nav>
 
       {/* Auth Modal */}
-      {showAuthModal && (
-        <AuthModal
-          isOpen={showAuthModal}
-          onClose={() => setShowAuthModal(false)}
-          initialType={authModalType}
-        />
-      )}
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        initialType={authModalType}
+      />
     </header>
   )
 } 
