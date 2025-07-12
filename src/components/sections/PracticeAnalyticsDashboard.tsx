@@ -19,10 +19,10 @@ import {
 } from 'lucide-react';
 
 interface PracticeAnalyticsDashboardProps {
-  onClose: () => void;
+  // Removed onClose prop since modal handles closing
 }
 
-export default function PracticeAnalyticsDashboard({ onClose }: PracticeAnalyticsDashboardProps) {
+export default function PracticeAnalyticsDashboard({}: PracticeAnalyticsDashboardProps) {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedWorkflowStep, setSelectedWorkflowStep] = useState<string | null>(null);
 
@@ -82,14 +82,6 @@ export default function PracticeAnalyticsDashboard({ onClose }: PracticeAnalytic
               <h2 className="text-2xl font-bold">Practice Analytics Dashboard</h2>
               <p className="text-blue-100 mt-1">Data-driven insights for practice growth</p>
             </div>
-            <button
-              onClick={onClose}
-              className="text-white hover:text-blue-100 transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
           </div>
         </div>
 

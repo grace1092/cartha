@@ -14,6 +14,7 @@ import {
   ArrowRight
 } from 'lucide-react'
 import { revealOnScroll } from '@/lib/utils'
+import Modal from '@/components/ui/Modal'
 import AISessionNotesDashboard from './AISessionNotesDashboard'
 import FollowUpAutomationDashboard from './FollowUpAutomationDashboard'
 import ClientManagementDashboard from './ClientManagementDashboard'
@@ -22,12 +23,15 @@ import SmartSchedulingDashboard from './SmartSchedulingDashboard'
 import PracticeAnalyticsDashboard from './PracticeAnalyticsDashboard'
 
 export default function Features() {
-  const [showAIDashboard, setShowAIDashboard] = useState(false)
-  const [showFollowUpDashboard, setShowFollowUpDashboard] = useState(false)
-  const [showClientDashboard, setShowClientDashboard] = useState(false)
-  const [showSecurityDashboard, setShowSecurityDashboard] = useState(false)
-  const [showSchedulingDashboard, setShowSchedulingDashboard] = useState(false)
-  const [showAnalyticsDashboard, setShowAnalyticsDashboard] = useState(false)
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    title: string;
+    type: string | null;
+  }>({
+    isOpen: false,
+    title: '',
+    type: null
+  });
 
   useEffect(() => {
     revealOnScroll()
@@ -122,19 +126,43 @@ export default function Features() {
 
   const handleLearnMore = (feature: any) => {
     if (feature.hasDashboard) {
-      if (feature.dashboardType === 'ai-notes') {
-        setShowAIDashboard(true)
-      } else if (feature.dashboardType === 'follow-up') {
-        setShowFollowUpDashboard(true)
-      } else if (feature.dashboardType === 'client-management') {
-        setShowClientDashboard(true)
-      } else if (feature.dashboardType === 'security') {
-        setShowSecurityDashboard(true)
-      } else if (feature.dashboardType === 'scheduling') {
-        setShowSchedulingDashboard(true)
-      } else if (feature.dashboardType === 'analytics') {
-        setShowAnalyticsDashboard(true)
-      }
+      setModalState({
+        isOpen: true,
+        title: feature.title,
+        type: feature.dashboardType
+      });
+    }
+  }
+
+  const closeModal = () => {
+    setModalState({
+      isOpen: false,
+      title: '',
+      type: null
+    });
+  }
+
+  const handleMinimize = () => {
+    // Future implementation for minimize functionality
+    console.log('Minimize clicked');
+  }
+
+  const renderModalContent = () => {
+    switch (modalState.type) {
+      case 'ai-notes':
+        return <AISessionNotesDashboard />;
+      case 'follow-up':
+        return <FollowUpAutomationDashboard />;
+      case 'client-management':
+        return <ClientManagementDashboard />;
+      case 'security':
+        return <SecurityDashboard />;
+      case 'scheduling':
+        return <SmartSchedulingDashboard />;
+      case 'analytics':
+        return <PracticeAnalyticsDashboard />;
+      default:
+        return <div>Tool not found</div>;
     }
   }
 
@@ -224,35 +252,16 @@ export default function Features() {
         </div>
       </section>
 
-      {/* AI Session Notes Dashboard Modal */}
-      {showAIDashboard && (
-        <AISessionNotesDashboard />
-      )}
-
-      {/* Follow-up Automation Dashboard Modal */}
-      {showFollowUpDashboard && (
-        <FollowUpAutomationDashboard />
-      )}
-
-      {/* Client Management Dashboard Modal */}
-      {showClientDashboard && (
-        <ClientManagementDashboard />
-      )}
-
-      {/* Security Dashboard Modal */}
-      {showSecurityDashboard && (
-        <SecurityDashboard />
-      )}
-
-      {/* Smart Scheduling Dashboard Modal */}
-      {showSchedulingDashboard && (
-        <SmartSchedulingDashboard />
-      )}
-
-      {/* Practice Analytics Dashboard Modal */}
-      {showAnalyticsDashboard && (
-        <PracticeAnalyticsDashboard onClose={() => setShowAnalyticsDashboard(false)} />
-      )}
+      {/* Full-Screen Modal */}
+      <Modal
+        isOpen={modalState.isOpen}
+        onClose={closeModal}
+        onMinimize={handleMinimize}
+        title={modalState.title}
+        showMinimize={true}
+      >
+        {renderModalContent()}
+      </Modal>
     </>
   )
 } 
