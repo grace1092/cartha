@@ -168,7 +168,18 @@ export default function Features() {
                   className="scroll-reveal group"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 h-full">
+                  <div 
+                    className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 h-full cursor-pointer hover:ring-2 hover:ring-blue-400"
+                    onClick={() => handleLearnMore(feature)}
+                    tabIndex={0}
+                    role="button"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        handleLearnMore(feature)
+                      }
+                    }}
+                  >
                     {/* Icon */}
                     <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                       <IconComponent className="w-8 h-8 text-white" />
@@ -194,9 +205,12 @@ export default function Features() {
                       ))}
                     </ul>
 
-                    {/* Learn More Link */}
+                    {/* Learn More Link - Now secondary action */}
                     <button 
-                      onClick={() => handleLearnMore(feature)}
+                      onClick={(e) => {
+                        e.stopPropagation() // Prevent card click when button is clicked
+                        handleLearnMore(feature)
+                      }}
                       className="text-blue-600 font-semibold text-sm group-hover:text-blue-700 transition-colors duration-300 flex items-center"
                     >
                       Learn more
