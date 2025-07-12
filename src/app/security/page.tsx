@@ -3,31 +3,17 @@
 import { useAuth } from '@/lib/context/AuthContext';
 import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
-import Hero from '@/components/sections/Hero'
-import Features from '@/components/sections/Features'
-import Stats from '@/components/sections/Stats'
-import Testimonials from '@/components/sections/Testimonials'
-import About from '@/components/sections/About'
-import Contact from '@/components/sections/Contact'
-import Pricing from '@/components/sections/Pricing'
-import FinalCTA from '@/components/sections/FinalCTA'
+import Security from '@/components/sections/Security'
 import Link from 'next/link';
 
-export default function Home() {
+export default function SecurityPage() {
   const { user } = useAuth();
 
   return (
     <>
       <Header />
       <main>
-        <Hero />
-        <Features />
-        <Stats />
-        <Testimonials />
-        <About />
-        <Contact />
-        <Pricing />
-        <FinalCTA />
+        <Security />
         
         {/* Dashboard Access for Logged In Users */}
         {user && (
@@ -44,4 +30,4 @@ export default function Home() {
       <Footer />
     </>
   )
-}
+} 
