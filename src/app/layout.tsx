@@ -2,6 +2,7 @@ import './globals.css'
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
 import { APP_CONSTANTS } from '@/lib/utils'
 import { SessionNotesProvider } from '@/lib/context/SessionNotesContext'
+import { AuthProvider } from '@/lib/context/AuthContext'
 
 const inter = Inter({ 
   subsets: ['latin'], 
@@ -79,9 +80,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${plusJakarta.variable}`}>
       <body className="min-h-screen antialiased">
-        <SessionNotesProvider>
-          {children}
-        </SessionNotesProvider>
+        <AuthProvider>
+          <SessionNotesProvider>
+            {children}
+          </SessionNotesProvider>
+        </AuthProvider>
       </body>
     </html>
   )
