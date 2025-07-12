@@ -9,6 +9,9 @@ import Stats from '@/components/sections/Stats'
 import Testimonials from '@/components/sections/Testimonials'
 import About from '@/components/sections/About'
 import Contact from '@/components/sections/Contact'
+import Security from '@/components/sections/Security'
+import API from '@/components/sections/API'
+import Integrations from '@/components/sections/Integrations'
 import Pricing from '@/components/sections/Pricing'
 import FinalCTA from '@/components/sections/FinalCTA'
 import Link from 'next/link';
@@ -26,6 +29,9 @@ export default function Home() {
         <Testimonials />
         <About />
         <Contact />
+        <Security />
+        <API />
+        <Integrations />
         <Pricing />
         <FinalCTA />
         
