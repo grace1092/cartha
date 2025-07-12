@@ -7,6 +7,7 @@ import Hero from '@/components/sections/Hero'
 import Features from '@/components/sections/Features'
 import Stats from '@/components/sections/Stats'
 import Testimonials from '@/components/sections/Testimonials'
+import About from '@/components/sections/About'
 import Pricing from '@/components/sections/Pricing'
 import FinalCTA from '@/components/sections/FinalCTA'
 import Link from 'next/link';
@@ -22,6 +23,7 @@ export default function Home() {
         <Features />
         <Stats />
         <Testimonials />
+        <About />
         <Pricing />
         <FinalCTA />
         
