@@ -904,3 +904,412 @@ create trigger update_support_tickets_updated_at before update on public.support
 
 create trigger update_coaching_sessions_updated_at before update on public.coaching_sessions
   for each row execute procedure update_updated_at_column(); 
+
+-- Enhanced Data Storage System Tables
+
+-- Data Storage Configuration
+CREATE TABLE data_storage_configs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    config_name VARCHAR(100) NOT NULL,
+    config_type VARCHAR(50) NOT NULL, -- 'backup', 'export', 'sync', 'retention'
+    settings JSONB NOT NULL,
+    is_active BOOLEAN DEFAULT true,
+    created_by UUID REFERENCES auth.users(id),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    CONSTRAINT valid_config_type CHECK (config_type IN ('backup', 'export', 'sync', 'retention'))
+);
+
+-- Enhanced Backup Management
+CREATE TABLE enhanced_backups (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    backup_name VARCHAR(255) NOT NULL,
+    backup_type VARCHAR(20) NOT NULL, -- 'full', 'incremental', 'differential', 'selective'
+    status VARCHAR(20) DEFAULT 'pending', -- 'pending', 'in_progress', 'completed', 'failed', 'restored'
+    file_path TEXT,
+    file_size BIGINT,
+    checksum VARCHAR(64),
+    encryption_key_id UUID,
+    compression_ratio DECIMAL(5,2),
+    backup_started_at TIMESTAMPTZ DEFAULT NOW(),
+    backup_completed_at TIMESTAMPTZ,
+    restored_at TIMESTAMPTZ,
+    restored_by UUID REFERENCES auth.users(id),
+    retention_days INTEGER DEFAULT 30,
+    metadata JSONB,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    CONSTRAINT valid_backup_type CHECK (backup_type IN ('full', 'incremental', 'differential', 'selective')),
+    CONSTRAINT valid_backup_status CHECK (status IN ('pending', 'in_progress', 'completed', 'failed', 'restored'))
+);
+
+-- Enhanced Export Management
+CREATE TABLE enhanced_exports (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES auth.users(id) NOT NULL,
+    export_name VARCHAR(255) NOT NULL,
+    export_type VARCHAR(50) NOT NULL, -- 'client_data', 'session_data', 'billing_data', 'full_export', 'audit_logs', 'custom'
+    format VARCHAR(20) NOT NULL, -- 'json', 'csv', 'xml', 'pdf', 'encrypted_zip'
+    status VARCHAR(20) DEFAULT 'pending', -- 'pending', 'processing', 'completed', 'failed', 'expired'
+    file_path TEXT,
+    file_size BIGINT,
+    encryption_key_id UUID,
+    requested_at TIMESTAMPTZ DEFAULT NOW(),
+    completed_at TIMESTAMPTZ,
+    expires_at TIMESTAMPTZ,
+    download_count INTEGER DEFAULT 0,
+    filters JSONB,
+    custom_fields TEXT[],
+    metadata JSONB,
+    CONSTRAINT valid_export_type CHECK (export_type IN ('client_data', 'session_data', 'billing_data', 'full_export', 'audit_logs', 'custom')),
+    CONSTRAINT valid_export_format CHECK (format IN ('json', 'csv', 'xml', 'pdf', 'encrypted_zip')),
+    CONSTRAINT valid_export_status CHECK (status IN ('pending', 'processing', 'completed', 'failed', 'expired'))
+);
+
+-- Enhanced Sync Management
+CREATE TABLE enhanced_sync_jobs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    table_name VARCHAR(100) NOT NULL,
+    operation VARCHAR(20) NOT NULL, -- 'insert', 'update', 'delete', 'bulk_update'
+    record_id UUID,
+    sync_status VARCHAR(20) DEFAULT 'pending', -- 'pending', 'synced', 'failed', 'conflict', 'retry'
+    sync_attempts INTEGER DEFAULT 0,
+    max_retries INTEGER DEFAULT 3,
+    last_sync_attempt TIMESTAMPTZ,
+    next_retry_at TIMESTAMPTZ,
+    error_message TEXT,
+    old_data JSONB,
+    new_data JSONB,
+    conflict_id UUID,
+    priority INTEGER DEFAULT 5, -- 1-10, higher is more important
+    metadata JSONB,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    CONSTRAINT valid_sync_operation CHECK (operation IN ('insert', 'update', 'delete', 'bulk_update')),
+    CONSTRAINT valid_sync_status CHECK (sync_status IN ('pending', 'synced', 'failed', 'conflict', 'retry'))
+);
+
+-- Data Integrity Monitoring
+CREATE TABLE data_integrity_checks (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    table_name VARCHAR(100) NOT NULL,
+    check_type VARCHAR(50) NOT NULL, -- 'foreign_key', 'unique_constraint', 'data_type', 'business_rule'
+    status VARCHAR(20) DEFAULT 'pending', -- 'pending', 'running', 'passed', 'failed'
+    issues_found INTEGER DEFAULT 0,
+    check_started_at TIMESTAMPTZ DEFAULT NOW(),
+    check_completed_at TIMESTAMPTZ,
+    error_message TEXT,
+    details JSONB,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    CONSTRAINT valid_check_type CHECK (check_type IN ('foreign_key', 'unique_constraint', 'data_type', 'business_rule')),
+    CONSTRAINT valid_check_status CHECK (status IN ('pending', 'running', 'passed', 'failed'))
+);
+
+-- Data Access Logs (Enhanced)
+CREATE TABLE data_access_logs (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES auth.users(id),
+    session_id UUID,
+    table_name VARCHAR(100) NOT NULL,
+    record_id UUID,
+    action VARCHAR(20) NOT NULL, -- 'create', 'read', 'update', 'delete', 'export', 'backup', 'restore'
+    access_level VARCHAR(20) NOT NULL, -- 'owner', 'shared', 'public', 'admin'
+    ip_address INET,
+    user_agent TEXT,
+    request_headers JSONB,
+    response_status INTEGER,
+    response_time_ms INTEGER,
+    data_size_bytes INTEGER,
+    old_values JSONB,
+    new_values JSONB,
+    metadata JSONB,
+    timestamp TIMESTAMPTZ DEFAULT NOW(),
+    CONSTRAINT valid_access_action CHECK (action IN ('create', 'read', 'update', 'delete', 'export', 'backup', 'restore')),
+    CONSTRAINT valid_access_level CHECK (access_level IN ('owner', 'shared', 'public', 'admin'))
+);
+
+-- Data Retention Policies
+CREATE TABLE data_retention_policies (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    policy_name VARCHAR(255) NOT NULL,
+    table_name VARCHAR(100) NOT NULL,
+    retention_period_days INTEGER NOT NULL,
+    retention_type VARCHAR(20) NOT NULL, -- 'soft_delete', 'hard_delete', 'archive'
+    archive_location TEXT,
+    is_active BOOLEAN DEFAULT true,
+    last_executed_at TIMESTAMPTZ,
+    records_processed INTEGER DEFAULT 0,
+    created_by UUID REFERENCES auth.users(id),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    CONSTRAINT valid_retention_type CHECK (retention_type IN ('soft_delete', 'hard_delete', 'archive'))
+);
+
+-- Data Encryption Keys
+CREATE TABLE data_encryption_keys (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    key_name VARCHAR(255) NOT NULL,
+    key_type VARCHAR(20) NOT NULL, -- 'backup', 'export', 'field', 'file'
+    key_algorithm VARCHAR(20) NOT NULL, -- 'AES-256', 'RSA-2048', 'ChaCha20'
+    encrypted_key TEXT NOT NULL,
+    key_checksum VARCHAR(64),
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    expires_at TIMESTAMPTZ,
+    created_by UUID REFERENCES auth.users(id),
+    CONSTRAINT valid_key_type CHECK (key_type IN ('backup', 'export', 'field', 'file')),
+    CONSTRAINT valid_key_algorithm CHECK (key_algorithm IN ('AES-256', 'RSA-2048', 'ChaCha20'))
+);
+
+-- Data Performance Metrics
+CREATE TABLE data_performance_metrics (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    metric_name VARCHAR(100) NOT NULL,
+    metric_type VARCHAR(50) NOT NULL, -- 'query_time', 'sync_time', 'backup_time', 'export_time'
+    table_name VARCHAR(100),
+    operation VARCHAR(50),
+    value DECIMAL(10,3) NOT NULL,
+    unit VARCHAR(20) NOT NULL, -- 'ms', 'bytes', 'count'
+    timestamp TIMESTAMPTZ DEFAULT NOW(),
+    metadata JSONB,
+    CONSTRAINT valid_metric_type CHECK (metric_type IN ('query_time', 'sync_time', 'backup_time', 'export_time'))
+);
+
+-- Data Storage Quotas
+CREATE TABLE data_storage_quotas (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES auth.users(id) NOT NULL,
+    quota_type VARCHAR(50) NOT NULL, -- 'storage', 'backup', 'export', 'sync'
+    limit_bytes BIGINT NOT NULL,
+    used_bytes BIGINT DEFAULT 0,
+    reset_frequency VARCHAR(20) NOT NULL, -- 'daily', 'weekly', 'monthly', 'yearly'
+    last_reset_at TIMESTAMPTZ DEFAULT NOW(),
+    next_reset_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    CONSTRAINT valid_quota_type CHECK (quota_type IN ('storage', 'backup', 'export', 'sync')),
+    CONSTRAINT valid_reset_frequency CHECK (reset_frequency IN ('daily', 'weekly', 'monthly', 'yearly'))
+);
+
+-- Create indexes for performance
+CREATE INDEX idx_enhanced_backups_status ON enhanced_backups(status);
+CREATE INDEX idx_enhanced_backups_type ON enhanced_backups(backup_type);
+CREATE INDEX idx_enhanced_backups_created_at ON enhanced_backups(created_at);
+CREATE INDEX idx_enhanced_exports_user_id ON enhanced_exports(user_id);
+CREATE INDEX idx_enhanced_exports_status ON enhanced_exports(status);
+CREATE INDEX idx_enhanced_exports_type ON enhanced_exports(export_type);
+CREATE INDEX idx_enhanced_sync_jobs_table_name ON enhanced_sync_jobs(table_name);
+CREATE INDEX idx_enhanced_sync_jobs_status ON enhanced_sync_jobs(sync_status);
+CREATE INDEX idx_enhanced_sync_jobs_priority ON enhanced_sync_jobs(priority);
+CREATE INDEX idx_data_access_logs_user_id ON data_access_logs(user_id);
+CREATE INDEX idx_data_access_logs_table_name ON data_access_logs(table_name);
+CREATE INDEX idx_data_access_logs_timestamp ON data_access_logs(timestamp);
+CREATE INDEX idx_data_integrity_checks_table_name ON data_integrity_checks(table_name);
+CREATE INDEX idx_data_integrity_checks_status ON data_integrity_checks(status);
+CREATE INDEX idx_data_retention_policies_table_name ON data_retention_policies(table_name);
+CREATE INDEX idx_data_retention_policies_active ON data_retention_policies(is_active);
+CREATE INDEX idx_data_encryption_keys_type ON data_encryption_keys(key_type);
+CREATE INDEX idx_data_encryption_keys_active ON data_encryption_keys(is_active);
+CREATE INDEX idx_data_performance_metrics_timestamp ON data_performance_metrics(timestamp);
+CREATE INDEX idx_data_performance_metrics_type ON data_performance_metrics(metric_type);
+CREATE INDEX idx_data_storage_quotas_user_id ON data_storage_quotas(user_id);
+CREATE INDEX idx_data_storage_quotas_type ON data_storage_quotas(quota_type);
+
+-- Functions for enhanced data storage system
+
+-- Function to calculate data checksum
+CREATE OR REPLACE FUNCTION calculate_data_checksum(data_text TEXT)
+RETURNS VARCHAR(64) AS $$
+BEGIN
+    RETURN encode(sha256(data_text::bytea), 'hex');
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to track data access
+CREATE OR REPLACE FUNCTION track_data_access(
+    p_user_id UUID,
+    p_table_name VARCHAR(100),
+    p_record_id UUID,
+    p_action VARCHAR(20),
+    p_access_level VARCHAR(20),
+    p_old_values JSONB DEFAULT NULL,
+    p_new_values JSONB DEFAULT NULL
+)
+RETURNS void AS $$
+BEGIN
+    INSERT INTO data_access_logs (
+        user_id,
+        session_id,
+        table_name,
+        record_id,
+        action,
+        access_level,
+        ip_address,
+        user_agent,
+        old_values,
+        new_values,
+        timestamp
+    ) VALUES (
+        p_user_id,
+        gen_random_uuid(), -- session_id (simplified)
+        p_table_name,
+        p_record_id,
+        p_action,
+        p_access_level,
+        inet_client_addr(),
+        current_setting('application_name', true),
+        p_old_values,
+        p_new_values,
+        NOW()
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to check data integrity
+CREATE OR REPLACE FUNCTION check_table_integrity(p_table_name VARCHAR(100))
+RETURNS TABLE(issue_type VARCHAR(50), issue_count INTEGER, details JSONB) AS $$
+DECLARE
+    check_id UUID;
+BEGIN
+    -- Create integrity check record
+    INSERT INTO data_integrity_checks (table_name, check_type, status)
+    VALUES (p_table_name, 'business_rule', 'running')
+    RETURNING id INTO check_id;
+
+    -- Check for orphaned records (simplified example)
+    RETURN QUERY
+    SELECT 
+        'orphaned_records'::VARCHAR(50) as issue_type,
+        COUNT(*)::INTEGER as issue_count,
+        jsonb_build_object('orphaned_ids', array_agg(id)) as details
+    FROM (
+        SELECT id FROM money_date_sessions 
+        WHERE couple_id NOT IN (SELECT id FROM couples)
+        LIMIT 100
+    ) orphaned;
+
+    -- Update check status
+    UPDATE data_integrity_checks 
+    SET status = 'passed', check_completed_at = NOW()
+    WHERE id = check_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to enforce data retention policies
+CREATE OR REPLACE FUNCTION enforce_retention_policies()
+RETURNS INTEGER AS $$
+DECLARE
+    policy_record RECORD;
+    affected_count INTEGER := 0;
+    total_affected INTEGER := 0;
+BEGIN
+    FOR policy_record IN 
+        SELECT * FROM data_retention_policies 
+        WHERE is_active = true 
+        AND (last_executed_at IS NULL OR last_executed_at < NOW() - INTERVAL '1 day')
+    LOOP
+        -- Execute retention policy based on type
+        CASE policy_record.retention_type
+            WHEN 'soft_delete' THEN
+                EXECUTE format(
+                    'UPDATE %I SET deleted_at = NOW() WHERE created_at < NOW() - INTERVAL ''%s days'' AND deleted_at IS NULL',
+                    policy_record.table_name,
+                    policy_record.retention_period_days
+                );
+                GET DIAGNOSTICS affected_count = ROW_COUNT;
+            WHEN 'hard_delete' THEN
+                EXECUTE format(
+                    'DELETE FROM %I WHERE created_at < NOW() - INTERVAL ''%s days''',
+                    policy_record.table_name,
+                    policy_record.retention_period_days
+                );
+                GET DIAGNOSTICS affected_count = ROW_COUNT;
+            WHEN 'archive' THEN
+                -- Archive logic would go here
+                affected_count := 0;
+        END CASE;
+
+        -- Update policy execution record
+        UPDATE data_retention_policies 
+        SET last_executed_at = NOW(), records_processed = records_processed + affected_count
+        WHERE id = policy_record.id;
+
+        total_affected := total_affected + affected_count;
+    END LOOP;
+
+    RETURN total_affected;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function to get storage usage statistics
+CREATE OR REPLACE FUNCTION get_storage_usage_stats(p_user_id UUID DEFAULT NULL)
+RETURNS TABLE(
+    table_name VARCHAR(100),
+    record_count BIGINT,
+    estimated_size_bytes BIGINT,
+    last_updated TIMESTAMPTZ
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        schemaname||'.'||tablename as table_name,
+        n_tup_ins + n_tup_upd + n_tup_del as record_count,
+        pg_total_relation_size(schemaname||'.'||tablename) as estimated_size_bytes,
+        last_vacuum as last_updated
+    FROM pg_stat_user_tables
+    WHERE schemaname = 'public'
+    AND (p_user_id IS NULL OR tablename LIKE '%' || p_user_id::text || '%')
+    ORDER BY estimated_size_bytes DESC;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Triggers for automatic data access tracking
+CREATE OR REPLACE FUNCTION trigger_track_data_access()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Track the operation
+    PERFORM track_data_access(
+        COALESCE(NEW.user_id, OLD.user_id),
+        TG_TABLE_NAME,
+        COALESCE(NEW.id, OLD.id),
+        TG_OP,
+        'owner',
+        CASE WHEN TG_OP = 'UPDATE' OR TG_OP = 'DELETE' THEN to_jsonb(OLD) ELSE NULL END,
+        CASE WHEN TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN to_jsonb(NEW) ELSE NULL END
+    );
+    
+    RETURN COALESCE(NEW, OLD);
+END;
+$$ LANGUAGE plpgsql;
+
+-- Apply triggers to key tables
+CREATE TRIGGER track_money_date_sessions_access
+    AFTER INSERT OR UPDATE OR DELETE ON money_date_sessions
+    FOR EACH ROW EXECUTE FUNCTION trigger_track_data_access();
+
+CREATE TRIGGER track_conversations_access
+    AFTER INSERT OR UPDATE OR DELETE ON conversations
+    FOR EACH ROW EXECUTE FUNCTION trigger_track_data_access();
+
+CREATE TRIGGER track_user_profiles_access
+    AFTER INSERT OR UPDATE OR DELETE ON profiles
+    FOR EACH ROW EXECUTE FUNCTION trigger_track_data_access();
+
+-- Update existing triggers to include new timestamp updates
+CREATE TRIGGER update_enhanced_backups_updated_at 
+    BEFORE UPDATE ON enhanced_backups 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_enhanced_exports_updated_at 
+    BEFORE UPDATE ON enhanced_exports 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_enhanced_sync_jobs_updated_at 
+    BEFORE UPDATE ON enhanced_sync_jobs 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_data_retention_policies_updated_at 
+    BEFORE UPDATE ON data_retention_policies 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_data_storage_quotas_updated_at 
+    BEFORE UPDATE ON data_storage_quotas 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column(); 

@@ -41,7 +41,7 @@ export default function Features() {
     {
       icon: FileText,
       title: 'AI Session Notes',
-      description: 'Automatically generate comprehensive session notes with AI-powered transcription and smart templates.',
+      description: 'Generate comprehensive session notes with AI assistance. Perfect for therapists, psychologists, and counselors.',
       gradient: 'from-blue-500 to-cyan-500',
       details: [
         'Real-time voice transcription',
@@ -55,7 +55,7 @@ export default function Features() {
     {
       icon: MessageSquare,
       title: 'Automated Follow-ups',
-      description: 'Keep clients engaged with personalized follow-up emails and appointment reminders.',
+      description: 'Automated client communication that saves time and improves engagement for all practice types.',
       gradient: 'from-purple-500 to-pink-500',
       details: [
         'Personalized email templates',
@@ -69,7 +69,7 @@ export default function Features() {
     {
       icon: Users,
       title: 'Client Management',
-      description: 'Comprehensive client dashboards with progress tracking and treatment milestone management.',
+      description: 'Lightweight client organization for individual and group practices. Simple, effective, and secure.',
       gradient: 'from-indigo-500 to-purple-500',
       details: [
         'Progress overview dashboards',
@@ -150,17 +150,17 @@ export default function Features() {
   const renderModalContent = () => {
     switch (modalState.type) {
       case 'ai-notes':
-        return <AISessionNotesDashboard />;
+        return <AISessionNotesDashboard onClose={closeModal} />;
       case 'follow-up':
-        return <FollowUpAutomationDashboard />;
+        return <FollowUpAutomationDashboard onClose={closeModal} />;
       case 'client-management':
-        return <ClientManagementDashboard />;
+        return <ClientManagementDashboard onClose={closeModal} />;
       case 'security':
-        return <SecurityDashboard />;
+        return <SecurityDashboard onClose={closeModal} />;
       case 'scheduling':
-        return <SmartSchedulingDashboard />;
+        return <SmartSchedulingDashboard onClose={closeModal} />;
       case 'analytics':
-        return <PracticeAnalyticsDashboard />;
+        return <PracticeAnalyticsDashboard onClose={closeModal} />;
       default:
         return <div>Tool not found</div>;
     }
@@ -168,18 +168,18 @@ export default function Features() {
 
   return (
     <>
-      <section id="features" className="py-24 lg:py-32 relative bg-gradient-to-b from-white to-gray-50">
+      <section id="features" className="py-24 lg:py-32 relative section-features">
         <div className="container-modern relative z-10">
           {/* Section Header */}
           <div className="text-center mb-20">
             <div className="scroll-reveal">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-heading mb-6">
                 Everything you need to run your
                 <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> therapy practice</span>
               </h2>
             </div>
             <div className="scroll-reveal" style={{ animationDelay: '0.2s' }}>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-xl text-body max-w-3xl mx-auto leading-relaxed">
                 Streamline your workflow with powerful tools designed specifically for mental health professionals. 
                 Focus on what matters most – your clients.
               </p>
@@ -197,68 +197,87 @@ export default function Features() {
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div 
-                    className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 h-full cursor-pointer hover:ring-2 hover:ring-blue-400"
+                    className="feature-card h-full cursor-pointer hover:ring-2 hover:ring-blue-400"
                     onClick={() => handleLearnMore(feature)}
-                    tabIndex={0}
-                    role="button"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault()
-                        handleLearnMore(feature)
-                      }
-                    }}
                   >
                     {/* Icon */}
-                    <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${feature.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                       <IconComponent className="w-8 h-8 text-white" />
                     </div>
 
-                    {/* Title */}
-                    <h3 className="text-xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors duration-300">
+                    {/* Content */}
+                    <h3 className="text-2xl font-bold text-heading mb-4 group-hover:text-blue-600 transition-colors duration-300">
                       {feature.title}
                     </h3>
-
-                    {/* Description */}
-                    <p className="text-gray-600 mb-6 leading-relaxed">
+                    <p className="text-body mb-6 leading-relaxed">
                       {feature.description}
                     </p>
 
-                    {/* Feature Details */}
+                    {/* Feature List */}
                     <ul className="space-y-3 mb-6">
                       {feature.details.map((detail, detailIndex) => (
                         <li key={detailIndex} className="flex items-start space-x-3">
-                          <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700 leading-relaxed">{detail}</span>
+                          <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-caption">{detail}</span>
                         </li>
                       ))}
                     </ul>
 
-                    {/* Learn More Link - Now secondary action */}
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation() // Prevent card click when button is clicked
-                        handleLearnMore(feature)
-                      }}
-                      className="text-blue-600 font-semibold text-sm group-hover:text-blue-700 transition-colors duration-300 flex items-center"
-                    >
-                      Learn more
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                    </button>
+                    {/* CTA */}
+                    <div className="flex items-center justify-between mt-auto">
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLearnMore(feature);
+                        }}
+                        className="flex items-center space-x-2 text-link hover:text-link-hover font-semibold transition-colors duration-200"
+                      >
+                        <span>Learn More</span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+                      </button>
+                      {feature.hasDashboard && (
+                        <div className="flex items-center space-x-1">
+                          <Zap className="w-4 h-4 text-yellow-500" />
+                          <span className="text-xs text-muted">Live Demo</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               )
             })}
           </div>
+
+          {/* Bottom CTA */}
+          <div className="text-center mt-16">
+            <div className="scroll-reveal">
+              <p className="text-lg text-body mb-8">
+                Ready to transform your practice? Start your free trial today.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button className="btn-primary px-8 py-4 text-lg font-semibold">
+                  Start Free Trial
+                </button>
+                <button className="btn-secondary px-8 py-4 text-lg font-semibold">
+                  Schedule Demo
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20" />
         </div>
       </section>
 
-      {/* Full-Screen Modal */}
+      {/* Feature Modal */}
       <Modal
         isOpen={modalState.isOpen}
         onClose={closeModal}
         onMinimize={handleMinimize}
         title={modalState.title}
-        showMinimize={true}
       >
         {renderModalContent()}
       </Modal>

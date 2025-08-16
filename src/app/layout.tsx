@@ -3,17 +3,22 @@ import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
 import { APP_CONSTANTS } from '@/lib/utils'
 import { SessionNotesProvider } from '@/lib/context/SessionNotesContext'
 import { AuthProvider } from '@/lib/context/AuthContext'
+import { ThemeProvider } from '@/lib/context/ThemeContext'
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary'
+import PerformanceInitializer from '@/components/performance/PerformanceInitializer'
 
 const inter = Inter({ 
   subsets: ['latin'], 
   variable: '--font-inter',
   display: 'swap',
+  preload: true,
 })
 
 const plusJakarta = Plus_Jakarta_Sans({ 
   subsets: ['latin'], 
   variable: '--font-plus-jakarta',
   display: 'swap',
+  preload: true,
 })
 
 export const metadata = {
@@ -79,12 +84,47 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${plusJakarta.variable}`}>
+      <head>
+        <meta name="theme-color" content="#3b82f6" />
+        <meta name="color-scheme" content="light dark" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+        
+        {/* Preload critical resources */}
+        <link rel="preload" href="/api/subscriptions/tiers" as="fetch" crossOrigin="anonymous" />
+        <link rel="preload" href="/api/waitlist" as="fetch" crossOrigin="anonymous" />
+        
+        {/* DNS prefetch for external domains */}
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+        <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
+        
+        {/* Preconnect to critical origins */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* Resource hints for performance */}
+        <link rel="preload" href="/api/analytics/performance" as="fetch" crossOrigin="anonymous" />
+      </head>
       <body className="min-h-screen antialiased">
-        <AuthProvider>
-          <SessionNotesProvider>
-            {children}
-          </SessionNotesProvider>
-        </AuthProvider>
+        {/* Skip to main content link for accessibility */}
+        <a href="#main-content" className="skip-link sr-only focus:not-sr-only">
+          Skip to main content
+        </a>
+        
+        <ErrorBoundary>
+          <ThemeProvider>
+            <AuthProvider>
+              <SessionNotesProvider>
+                <PerformanceInitializer />
+                <main id="main-content">
+                  {children}
+                </main>
+              </SessionNotesProvider>
+            </AuthProvider>
+          </ThemeProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )

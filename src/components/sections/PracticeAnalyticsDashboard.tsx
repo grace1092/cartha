@@ -19,10 +19,10 @@ import {
 } from 'lucide-react';
 
 interface PracticeAnalyticsDashboardProps {
-  // Removed onClose prop since modal handles closing
+  onClose?: () => void;
 }
 
-export default function PracticeAnalyticsDashboard({}: PracticeAnalyticsDashboardProps) {
+export default function PracticeAnalyticsDashboard({ onClose }: PracticeAnalyticsDashboardProps) {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedWorkflowStep, setSelectedWorkflowStep] = useState<string | null>(null);
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Check, Star, Shield, Users, Building, Lock, Clock, TrendingUp, DollarSign, Zap, Brain, Target } from 'lucide-react'
 import { revealOnScroll } from '@/lib/utils'
+import { WaitlistModal } from '@/components/ui/WaitlistModal'
 
 export default function Pricing() {
   const [timeLeft, setTimeLeft] = useState({
@@ -12,6 +13,8 @@ export default function Pricing() {
     seconds: 0
   })
   const [isLoading, setIsLoading] = useState(false)
+  const [showWaitlistModal, setShowWaitlistModal] = useState(false)
+  const [selectedPlan, setSelectedPlan] = useState('')
 
   useEffect(() => {
     revealOnScroll()
@@ -40,34 +43,35 @@ export default function Pricing() {
 
   const plans = [
     {
-      name: 'Solo Therapist',
+      name: 'Solo Practitioner',
       icon: Users,
-      price: 120,
-      originalPrice: 171,
-      description: 'This is your clinic\'s brain — not just software',
-      subtitle: 'Professional operating cost, not a nice-to-have',
+      price: 49,
+      originalPrice: 120,
+      description: 'Perfect for individual therapists, psychologists, and counselors',
+      subtitle: 'Everything you need to manage your practice',
       features: [
         'AI-powered session notes & documentation',
         'Client progress tracking & analytics',
         'Automated follow-up & appointment reminders',
         'HIPAA-compliant security & encryption',
         'Mobile app for on-the-go access',
-        'Apple/Epic/Stripe ecosystem integration',
-        'Priority email support',
-        'Practice growth insights'
+        'Billing & invoicing tools',
+        'Email support',
+        'Calendar integration'
       ],
       gradient: 'from-blue-500 to-cyan-500',
       popular: false,
-      foundingMemberPrice: 84,
-      savings: '30% off for life'
+      // Beta Launch Pricing (first 10 signups, locked for life)
+      foundingMemberPrice: 20,
+      savings: 'Locked for life'
     },
     {
-      name: 'Group Practice',
+      name: 'Small Group Practice',
       icon: Building,
-      price: 360,
-      originalPrice: 514,
-      description: 'Cartha scales with your care',
-      subtitle: '5 users → $72 per therapist',
+      price: 149,
+      originalPrice: 360,
+      description: 'For small teams and group practices',
+      subtitle: '2-10 practitioners',
       features: [
         'Everything in Solo, plus:',
         'Multi-user team collaboration',
@@ -76,22 +80,23 @@ export default function Pricing() {
         'Practice performance insights',
         'Team scheduling & coordination',
         'Priority phone support',
-        'Custom integrations & API access'
+        'Custom integrations'
       ],
       gradient: 'from-purple-500 to-pink-500',
       popular: true,
-      foundingMemberPrice: 252,
-      savings: '30% off for life'
+      // Beta Launch Pricing (first 10 signups, locked for life)
+      foundingMemberPrice: 60,
+      savings: 'Locked for life'
     },
     {
-      name: 'Clinic Tier',
+      name: 'Large Organization',
       icon: Shield,
-      price: 1200,
-      originalPrice: 1714,
-      description: 'Not per seat — this is your operational core',
-      subtitle: 'Enterprise-level positioning',
+      price: 499,
+      originalPrice: 1200,
+      description: 'For clinics, hospitals, and large practices',
+      subtitle: '10+ practitioners',
       features: [
-        'Everything in Group Practice, plus:',
+        'Everything in Small Group, plus:',
         'Unlimited users & locations',
         'Dedicated account manager',
         'Custom API & white-label options',
@@ -102,8 +107,9 @@ export default function Pricing() {
       ],
       gradient: 'from-indigo-500 to-purple-500',
       popular: false,
-      foundingMemberPrice: 840,
-      savings: '30% off for life'
+      // Beta Launch Pricing (first 10 signups, locked for life)
+      foundingMemberPrice: 200,
+      savings: 'Locked for life'
     }
   ]
 
@@ -116,56 +122,48 @@ export default function Pricing() {
     { label: 'Return on Investment', value: '10x ROI', icon: Brain, color: 'text-pink-600' }
   ]
 
-  const handleJoinWaitlist = async (planName: string) => {
-    setIsLoading(true)
-    try {
-      // TODO: Implement waitlist signup
-      console.log(`Joining waitlist for ${planName}`)
-    } catch (error) {
-      console.error('Error joining waitlist:', error)
-    } finally {
-      setIsLoading(false)
-    }
+  const handleJoinWaitlist = (planName: string) => {
+    setSelectedPlan(planName)
+    setShowWaitlistModal(true)
   }
 
   return (
-    <section id="pricing" className="py-20 lg:py-32 relative bg-gradient-to-b from-gray-50 to-white">
+    <section id="pricing" className="py-20 lg:py-32 section-pricing relative">
       <div className="container-modern relative z-10">
         {/* Founding Member Countdown */}
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl p-6 mb-16 shadow-xl">
+        <div className="bg-gradient-to-r from-primary-700 to-purple-700 text-white rounded-2xl p-6 mb-16 shadow-xl">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <Lock className="w-5 h-5" />
-              <h3 className="text-xl font-bold">Founding Member Access</h3>
+              <h3 className="text-xl font-bold">Beta Launch Pricing</h3>
             </div>
-            <p className="text-purple-100 mb-6 max-w-2xl mx-auto">
-              Only 500 total seats across all tiers. Must join by September 15, 2025. 
-              Private rollout. After this, prices go up — forever.
+            <p className="text-primary-100 mb-6 max-w-2xl mx-auto">
+              First 10 signups across all tiers. Lock in your price for life.
             </p>
             
             {/* Countdown Timer */}
             <div className="grid grid-cols-4 gap-4 max-w-md mx-auto mb-6">
-              <div className="bg-white/20 rounded-lg p-3 text-center">
+              <div className="bg-card/20 rounded-lg p-3 text-center">
                 <div className="text-2xl font-bold">{timeLeft.days}</div>
-                <div className="text-sm text-purple-100">Days</div>
+                <div className="text-sm text-primary-100">Days</div>
               </div>
-              <div className="bg-white/20 rounded-lg p-3 text-center">
+              <div className="bg-card/20 rounded-lg p-3 text-center">
                 <div className="text-2xl font-bold">{timeLeft.hours}</div>
-                <div className="text-sm text-purple-100">Hours</div>
+                <div className="text-sm text-primary-100">Hours</div>
               </div>
-              <div className="bg-white/20 rounded-lg p-3 text-center">
+              <div className="bg-card/20 rounded-lg p-3 text-center">
                 <div className="text-2xl font-bold">{timeLeft.minutes}</div>
-                <div className="text-sm text-purple-100">Minutes</div>
+                <div className="text-sm text-primary-100">Minutes</div>
               </div>
-              <div className="bg-white/20 rounded-lg p-3 text-center">
+              <div className="bg-card/20 rounded-lg p-3 text-center">
                 <div className="text-2xl font-bold">{timeLeft.seconds}</div>
-                <div className="text-sm text-purple-100">Seconds</div>
+                <div className="text-sm text-primary-100">Seconds</div>
               </div>
             </div>
 
             <div className="flex items-center justify-center space-x-4 text-sm">
-              <span className="bg-white/20 px-3 py-1 rounded-full">30% off for life</span>
-              <span className="bg-white/20 px-3 py-1 rounded-full">3 invite codes</span>
+              <span className="bg-card/20 px-3 py-1 rounded-full font-semibold">Locked for life</span>
+              <span className="bg-card/20 px-3 py-1 rounded-full font-semibold">First 10 signups</span>
             </div>
           </div>
         </div>
@@ -173,38 +171,38 @@ export default function Pricing() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className="scroll-reveal">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              Professional operating cost — not a nice-to-have
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-heading mb-6">
+              Lightweight client management — not another bloated system
             </h2>
           </div>
           <div className="scroll-reveal" style={{ animationDelay: '0.2s' }}>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-              Therapists who generate $10K+/month shouldn't waste 10+ hours on admin. 
-              Cartha saves you time, protects your license, and sharpens your clinical edge.
+            <p className="text-xl text-body max-w-3xl mx-auto mb-8">
+              For therapists, psychologists, and counselors who work one-on-one or in small groups. 
+              Cartha handles your notes, billing, and client communication so you can focus on what matters.
             </p>
-            <p className="text-lg font-semibold text-gray-900">
-              Starting at $120/month. Founding members save 30% for life.
+            <p className="text-lg font-semibold text-heading">
+              Starting at $49/month. Founding members save 59% for life.
             </p>
           </div>
         </div>
 
         {/* ROI Calculator */}
-        <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 mb-16 border border-blue-200">
+        <div className="bg-card rounded-2xl p-8 mb-16 border border-card-border shadow-lg dark:shadow-[0_4px_32px_0_rgba(0,0,0,0.7)]">
           <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Value Justification</h3>
-            <p className="text-gray-600">See the real impact on your practice</p>
+            <h3 className="text-2xl font-bold text-heading mb-2">Value Justification</h3>
+            <p className="text-body">See the real impact on your practice</p>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {roiMetrics.map((metric, index) => {
               const IconComponent = metric.icon
               return (
-                <div key={index} className="text-center">
-                  <div className={`w-12 h-12 mx-auto mb-3 rounded-lg bg-white flex items-center justify-center shadow-sm`}>
-                    <IconComponent className={`w-6 h-6 ${metric.color}`} />
+                <div key={index} className="scroll-reveal" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <div className="bg-card rounded-xl p-4 text-center shadow-sm border border-card-border dark:shadow-[0_2px_16px_0_rgba(0,0,0,0.5)]">
+                    <IconComponent className={`w-8 h-8 mx-auto mb-2 ${metric.color} dark:text-primary-300`} />
+                    <div className="text-lg font-bold text-heading dark:text-primary-100">{metric.value}</div>
+                    <div className="text-sm text-body dark:text-primary-200">{metric.label}</div>
                   </div>
-                  <div className="text-xl font-bold text-gray-900 mb-1">{metric.value}</div>
-                  <div className="text-sm text-gray-600">{metric.label}</div>
                 </div>
               )
             })}
@@ -212,84 +210,79 @@ export default function Pricing() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
           {plans.map((plan, index) => {
             const IconComponent = plan.icon
             return (
               <div
                 key={plan.name}
-                className={`scroll-reveal relative ${
-                  plan.popular ? 'lg:scale-105' : ''
+                className={`scroll-reveal relative bg-card rounded-2xl shadow-xl border-2 transition-all duration-300 hover:shadow-2xl dark:shadow-[0_8px_40px_0_rgba(0,0,0,0.7)] ${
+                   plan.popular ? 'border-purple-500 scale-105' : 'border-card-border hover:border-primary-500'
                 }`}
-                style={{ animationDelay: `${index * 0.1}s` }}
+                style={{ animationDelay: `${index * 0.2}s` }}
               >
-                {/* Founding Member Badge */}
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                  <div className="px-6 py-2 rounded-full text-white text-sm font-semibold bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg flex items-center space-x-2">
-                    <Lock className="w-4 h-4" />
-                    <span>Founding Member</span>
-                  </div>
-                </div>
-
-                {/* Popular Badge */}
                 {plan.popular && (
-                  <div className="absolute -top-4 right-4 z-10">
-                    <div className="px-4 py-2 rounded-full text-white text-sm font-semibold bg-gradient-to-r from-green-500 to-emerald-500 shadow-lg">
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-gradient-to-r from-primary-700 to-purple-700 text-white px-4 py-2 rounded-full text-sm font-semibold flex items-center shadow-lg dark:shadow-[0_2px_12px_0_rgba(0,0,0,0.5)]">
+                      <Star className="w-4 h-4 mr-1" />
                       Most Popular
                     </div>
                   </div>
                 )}
 
-                <div className={`bg-white rounded-2xl p-8 shadow-lg border border-gray-100 h-full transition-all duration-300 hover:shadow-xl ${
-                  plan.popular ? 'ring-2 ring-purple-500' : ''
-                }`}>
-                  {/* Icon */}
-                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-br ${plan.gradient} flex items-center justify-center mb-6`}>
-                    <IconComponent className="w-8 h-8 text-white" />
+                <div className="p-8">
+                  {/* Plan Header */}
+                  <div className="text-center mb-8">
+                    <div className={`w-16 h-16 bg-gradient-to-r ${plan.gradient} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg dark:shadow-[0_2px_12px_0_rgba(0,0,0,0.5)]`}>
+                      <IconComponent className="w-8 h-8 text-white dark:text-primary-100" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-heading mb-2 dark:text-primary-100">{plan.name}</h3>
+                    {/* First 10 Signups badge */}
+                    <div className="flex items-center justify-center mb-3">
+                      <span className="inline-block rounded-full bg-amber-100 text-amber-800 text-xs font-semibold px-2 py-0.5">
+                        First 10 Signups Only
+                      </span>
+                    </div>
+                    <p className="text-body mb-4 font-medium dark:text-primary-200">{plan.description}</p>
+                    <p className="text-sm text-muted dark:text-primary-300">{plan.subtitle}</p>
                   </div>
 
-                  {/* Plan Name */}
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-
-                  {/* Description */}
-                  <p className="text-gray-600 mb-2">{plan.description}</p>
-                  <p className="text-sm text-gray-500 mb-6">{plan.subtitle}</p>
-
-                  {/* Price */}
-                  <div className="mb-8">
-                    <div className="flex items-baseline">
-                      <span className="text-4xl font-bold text-gray-900">${plan.foundingMemberPrice}</span>
-                      <span className="text-gray-600 ml-2">/month</span>
+                  {/* Pricing */}
+                  <div className="text-center mb-8">
+                    <div className="flex items-center justify-center space-x-2 mb-2">
+                      <span className="text-4xl font-bold text-heading dark:text-primary-100">${plan.foundingMemberPrice}</span>
+                      <span className="text-lg text-muted dark:text-primary-300">/month</span>
                     </div>
-                    <div className="flex items-center space-x-2 mt-2">
-                      <span className="text-lg text-gray-400 line-through">${plan.originalPrice}</span>
-                      <span className="text-sm bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
-                        {plan.savings}
-                      </span>
+                    <div className="flex items-center justify-center space-x-2 mb-4">
+                      <span className="text-lg text-muted line-through dark:text-primary-400">${plan.originalPrice}</span>
+                      <span className="text-sm font-semibold text-green-400 dark:text-green-300">{plan.savings}</span>
+                    </div>
+                    <div className="text-xs text-muted dark:text-primary-400">
+                      Founding member pricing • Help shape Cartha and keep your price for life.
                     </div>
                   </div>
 
                   {/* Features */}
-                  <ul className="space-y-4 mb-8">
+                  <div className="space-y-4 mb-8">
                     {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-start space-x-3">
-                        <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700">{feature}</span>
-                      </li>
+                      <div key={featureIndex} className="flex items-start space-x-3">
+                        <Check className="w-5 h-5 text-green-400 dark:text-green-300 mt-0.5 flex-shrink-0" />
+                        <span className="text-body font-medium dark:text-primary-200">{feature}</span>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
 
                   {/* CTA Button */}
                   <button
                     onClick={() => handleJoinWaitlist(plan.name)}
                     disabled={isLoading}
-                    className={`w-full py-4 px-6 rounded-xl font-semibold transition-all duration-300 ${
+                    className={`w-full py-4 px-6 rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 ${
                       plan.popular
-                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'
-                        : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600'
-                    } hover:scale-105 shadow-lg`}
+                        ? 'bg-gradient-to-r from-primary-700 to-purple-700 text-white hover:from-primary-800 hover:to-purple-800'
+                        : 'bg-gradient-to-r from-gray-900 to-gray-800 text-white hover:from-black hover:to-gray-900'
+                    } disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary-500 dark:shadow-[0_2px_12px_0_rgba(0,0,0,0.5)]`}
                   >
-                    {isLoading ? 'Joining...' : 'Join the Waitlist'}
+                    {isLoading ? 'Joining...' : plan.name === 'Large Organization' ? 'Contact Sales' : 'Join the Waitlist'}
                   </button>
                 </div>
               </div>
@@ -297,27 +290,32 @@ export default function Pricing() {
           })}
         </div>
 
-        {/* Trust Signals */}
+        {/* Bottom CTA */}
         <div className="text-center">
-          <div className="scroll-reveal" style={{ animationDelay: '0.4s' }}>
-            <p className="text-gray-600 mb-8">Trusted by leading mental health organizations</p>
-            <div className="flex flex-wrap justify-center items-center gap-8">
-              <div className="bg-white px-6 py-3 rounded-lg shadow-sm border border-gray-200">
-                <span className="text-sm font-semibold text-gray-700">HIPAA Compliant</span>
-              </div>
-              <div className="bg-white px-6 py-3 rounded-lg shadow-sm border border-gray-200">
-                <span className="text-sm font-semibold text-gray-700">SOC 2 Type II</span>
-              </div>
-              <div className="bg-white px-6 py-3 rounded-lg shadow-sm border border-gray-200">
-                <span className="text-sm font-semibold text-gray-700">256-bit SSL</span>
-              </div>
-              <div className="bg-white px-6 py-3 rounded-lg shadow-sm border border-gray-200">
-                <span className="text-sm font-semibold text-gray-700">GDPR Ready</span>
-              </div>
-            </div>
+          <div className="scroll-reveal">
+            <h3 className="text-2xl font-bold text-heading mb-4">
+              Ready to transform your practice?
+            </h3>
+            <p className="text-lg text-body mb-8 max-w-2xl mx-auto">
+              Join 500+ therapists who are already on the waitlist. 
+              Get exclusive founding member pricing and early access to CARTHA.
+            </p>
+            <button
+              onClick={() => handleJoinWaitlist('General')}
+              className="bg-gradient-to-r from-primary-700 to-purple-700 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:from-primary-800 hover:to-purple-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              Join Founding Member Program
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Waitlist Modal */}
+      <WaitlistModal
+        isOpen={showWaitlistModal}
+        onClose={() => setShowWaitlistModal(false)}
+        source="pricing_page"
+      />
     </section>
   )
 } 

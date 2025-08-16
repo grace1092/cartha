@@ -269,15 +269,7 @@ const DateSuggestions: React.FC<DateSuggestionsProps> = ({
           </div>
         </div>
 
-        {/* Loading State */}
-        {isLoading && (
-          <div className="flex items-center justify-center py-12">
-            <div className="flex items-center gap-3">
-              <Brain className="w-6 h-6 text-purple-600 animate-pulse" />
-              <span className="text-lg text-gray-600">AI is analyzing optimal times...</span>
-            </div>
-          </div>
-        )}
+        {/* Remove loading state to show content immediately */}
 
         {/* Suggestions List */}
         <AnimatePresence>

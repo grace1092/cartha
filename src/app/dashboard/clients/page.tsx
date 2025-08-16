@@ -1,203 +1,234 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
-import { Client } from '@/lib/types/database'
-import { getClientInitials, formatDate } from '@/lib/utils'
+import { useState } from 'react';
+import { useAuth } from '@/lib/context/AuthContext';
+import Link from 'next/link';
+import { 
+  ArrowLeft,
+  Plus,
+  Search,
+  Filter,
+  MoreVertical,
+  User,
+  Phone,
+  Mail,
+  Calendar,
+  FileText,
+  Clock,
+  DollarSign
+} from 'lucide-react';
+
+interface Client {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  lastSession: string;
+  nextSession: string | null;
+  status: 'active' | 'inactive' | 'pending';
+  totalSessions: number;
+  outstandingBalance: number;
+}
 
 export default function ClientsPage() {
-  const [clients, setClients] = useState<Client[]>([])
-  const [filteredClients, setFilteredClients] = useState<Client[]>([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filter, setFilter] = useState<'all' | 'active' | 'inactive'>('all')
+  const { user } = useAuth();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive' | 'pending'>('all');
 
-  const supabase = createClientSupabaseClient()
-
-  useEffect(() => {
-    fetchClients()
-  }, [])
-
-  useEffect(() => {
-    filterClients()
-  }, [clients, searchTerm, filter])
-
-  const fetchClients = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) return
-
-      const { data, error } = await supabase
-        .from('clients')
-        .select('*')
-        .eq('therapist_id', session.user.id)
-        .order('created_at', { ascending: false })
-
-      if (error) {
-        console.error('Error fetching clients:', error)
-        return
-      }
-
-      setClients(data || [])
-    } catch (error) {
-      console.error('Error fetching clients:', error)
-    } finally {
-      setLoading(false)
+  // Demo client data
+  const clients: Client[] = [
+    {
+      id: '1',
+      name: 'Maria Rodriguez',
+      email: 'maria.r@email.com',
+      phone: '(555) 123-4567',
+      lastSession: '2024-01-15',
+      nextSession: '2024-01-22',
+      status: 'active',
+      totalSessions: 12,
+      outstandingBalance: 0
+    },
+    {
+      id: '2',
+      name: 'John Smith',
+      email: 'john.smith@email.com',
+      phone: '(555) 234-5678',
+      lastSession: '2024-01-14',
+      nextSession: '2024-01-18',
+      status: 'active',
+      totalSessions: 8,
+      outstandingBalance: 150
+    },
+    {
+      id: '3',
+      name: 'Alex Chen',
+      email: 'alex.chen@email.com',
+      phone: '(555) 345-6789',
+      lastSession: '2024-01-10',
+      nextSession: null,
+      status: 'pending',
+      totalSessions: 3,
+      outstandingBalance: 75
+    },
+    {
+      id: '4',
+      name: 'Sarah Johnson',
+      email: 'sarah.j@email.com',
+      phone: '(555) 456-7890',
+      lastSession: '2024-01-12',
+      nextSession: '2024-01-20',
+      status: 'active',
+      totalSessions: 15,
+      outstandingBalance: 0
+    },
+    {
+      id: '5',
+      name: 'Michael Davis',
+      email: 'm.davis@email.com',
+      phone: '(555) 567-8901',
+      lastSession: '2023-12-15',
+      nextSession: null,
+      status: 'inactive',
+      totalSessions: 6,
+      outstandingBalance: 225
     }
-  }
+  ];
 
-  const filterClients = () => {
-    let filtered = clients
+  const filteredClients = clients.filter(client => {
+    const matchesSearch = client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         client.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter = filterStatus === 'all' || client.status === filterStatus;
+    return matchesSearch && matchesFilter;
+  });
 
-    // Apply status filter
-    if (filter === 'active') {
-      filtered = filtered.filter(client => client.is_active)
-    } else if (filter === 'inactive') {
-      filtered = filtered.filter(client => !client.is_active)
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'active': return 'bg-green-100 text-green-800';
+      case 'inactive': return 'bg-gray-100 text-gray-800';
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
+  };
 
-    // Apply search filter
-    if (searchTerm) {
-      filtered = filtered.filter(client =>
-        `${client.first_name} ${client.last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        client.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        client.phone?.includes(searchTerm)
-      )
-    }
-
-    setFilteredClients(filtered)
-  }
-
-  const toggleClientStatus = async (clientId: string, currentStatus: boolean) => {
-    try {
-      const { error } = await supabase
-        .from('clients')
-        .update({ is_active: !currentStatus })
-        .eq('id', clientId)
-
-      if (error) {
-        console.error('Error updating client status:', error)
-        return
-      }
-
-      // Update local state
-      setClients(clients.map(client => 
-        client.id === clientId 
-          ? { ...client, is_active: !currentStatus }
-          : client
-      ))
-    } catch (error) {
-      console.error('Error updating client status:', error)
-    }
-  }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
-      </div>
-    )
-  }
+  if (!user) return null;
 
   return (
-    <div className="px-4 lg:px-8">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
-        <div>
-          <h1 className="heading-xl text-gray-900 mb-2">Clients</h1>
-          <p className="body-lg text-gray-600">
-            Manage your client roster and information
-          </p>
+      <div className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between py-4">
+            <div className="flex items-center space-x-4">
+              <Link 
+                href="/dashboard"
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                <span>Back to Dashboard</span>
+              </Link>
+              <div className="h-6 w-px bg-gray-300"></div>
+              <h1 className="text-2xl font-bold text-gray-900">Client Management</h1>
+            </div>
+            <button className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+              <Plus className="w-4 h-4" />
+              <span>Add New Client</span>
+            </button>
+          </div>
         </div>
-        <Link
-          href="/dashboard/clients/new"
-          className="btn-primary mt-4 sm:mt-0"
-        >
-          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
-          Add New Client
-        </Link>
       </div>
 
-      {/* Filters and Search */}
-      <div className="glass-card p-6 mb-8">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 lg:space-x-4">
-          {/* Search */}
-          <div className="flex-1 max-w-md">
-            <div className="relative">
-              <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input
-                type="text"
-                placeholder="Search clients..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="input-modern pl-10"
-              />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Total Clients</p>
+                <p className="text-2xl font-bold text-gray-900">{clients.length}</p>
+              </div>
+              <User className="w-8 h-8 text-blue-500" />
             </div>
           </div>
-
-          {/* Status Filter */}
-          <div className="flex space-x-2">
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                filter === 'all'
-                  ? 'bg-blue-100 text-blue-700'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-              }`}
-            >
-              All ({clients.length})
-            </button>
-            <button
-              onClick={() => setFilter('active')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                filter === 'active'
-                  ? 'bg-green-100 text-green-700'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-              }`}
-            >
-              Active ({clients.filter(c => c.is_active).length})
-            </button>
-            <button
-              onClick={() => setFilter('inactive')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                filter === 'inactive'
-                  ? 'bg-gray-100 text-gray-700'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-              }`}
-            >
-              Inactive ({clients.filter(c => !c.is_active).length})
-            </button>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Active Clients</p>
+                <p className="text-2xl font-bold text-gray-900">{clients.filter(c => c.status === 'active').length}</p>
+              </div>
+              <Calendar className="w-8 h-8 text-green-500" />
+            </div>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Pending Follow-ups</p>
+                <p className="text-2xl font-bold text-gray-900">{clients.filter(c => c.status === 'pending').length}</p>
+              </div>
+              <Clock className="w-8 h-8 text-orange-500" />
+            </div>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Outstanding Balance</p>
+                <p className="text-2xl font-bold text-gray-900">${clients.reduce((sum, c) => sum + c.outstandingBalance, 0)}</p>
+              </div>
+              <DollarSign className="w-8 h-8 text-purple-500" />
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Clients List */}
-      {filteredClients.length > 0 ? (
-        <div className="glass-card overflow-hidden">
+        {/* Filters and Search */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search clients by name or email..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <Filter className="w-5 h-5 text-gray-400" />
+                <select
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value as any)}
+                  className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="all">All Status</option>
+                  <option value="active">Active</option>
+                  <option value="pending">Pending</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Client List */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-900">Client Directory</h2>
+            <p className="text-sm text-gray-600">Manage your client information and track their progress</p>
+          </div>
+          
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Client
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Contact
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Intake Date
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Session</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Next Session</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sessions</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Balance</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -205,62 +236,44 @@ export default function ClientsPage() {
                   <tr key={client.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mr-3">
-                          <span className="text-white font-medium text-sm">
-                            {getClientInitials(client.first_name, client.last_name)}
+                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                          <span className="text-white text-sm font-semibold">
+                            {client.name.split(' ').map(n => n[0]).join('')}
                           </span>
                         </div>
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">
-                            {client.first_name} {client.last_name}
-                          </div>
-                          {client.treatment_goals && (
-                            <div className="text-sm text-gray-500 truncate max-w-xs">
-                              {client.treatment_goals}
-                            </div>
-                          )}
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">{client.name}</div>
+                          <div className="text-sm text-gray-500">{client.email}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{client.email || 'No email'}</div>
-                      <div className="text-sm text-gray-500">{client.phone || 'No phone'}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {formatDate(client.intake_date)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        client.is_active
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-gray-100 text-gray-800'
-                      }`}>
-                        {client.is_active ? 'Active' : 'Inactive'}
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(client.status)}`}>
+                        {client.status.charAt(0).toUpperCase() + client.status.slice(1)}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex items-center justify-end space-x-2">
-                        <Link
-                          href={`/dashboard/clients/${client.id}`}
-                          className="text-blue-600 hover:text-blue-700"
-                        >
-                          View
-                        </Link>
-                        <Link
-                          href={`/dashboard/clients/${client.id}/edit`}
-                          className="text-gray-600 hover:text-gray-700"
-                        >
-                          Edit
-                        </Link>
-                        <button
-                          onClick={() => toggleClientStatus(client.id, client.is_active)}
-                          className={`${
-                            client.is_active 
-                              ? 'text-red-600 hover:text-red-700' 
-                              : 'text-green-600 hover:text-green-700'
-                          }`}
-                        >
-                          {client.is_active ? 'Deactivate' : 'Activate'}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {new Date(client.lastSession).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {client.nextSession ? new Date(client.nextSession).toLocaleDateString() : 'Not scheduled'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {client.totalSessions}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      ${client.outstandingBalance}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <div className="flex items-center space-x-2">
+                        <button className="text-blue-600 hover:text-blue-900">
+                          <FileText className="w-4 h-4" />
+                        </button>
+                        <button className="text-green-600 hover:text-green-900">
+                          <Calendar className="w-4 h-4" />
+                        </button>
+                        <button className="text-gray-400 hover:text-gray-600">
+                          <MoreVertical className="w-4 h-4" />
                         </button>
                       </div>
                     </td>
@@ -270,27 +283,24 @@ export default function ClientsPage() {
             </table>
           </div>
         </div>
-      ) : (
-        <div className="glass-card p-12 text-center">
-          <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-          </svg>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
-            {searchTerm || filter !== 'all' ? 'No clients found' : 'No clients yet'}
-          </h3>
-          <p className="text-gray-600 mb-6">
-            {searchTerm || filter !== 'all' 
-              ? 'Try adjusting your search or filter criteria.'
-              : 'Get started by adding your first client.'
-            }
-          </p>
-          {(!searchTerm && filter === 'all') && (
-            <Link href="/dashboard/clients/new" className="btn-primary">
-              Add Your First Client
-            </Link>
-          )}
-        </div>
-      )}
+
+        {/* Empty State */}
+        {filteredClients.length === 0 && (
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+            <User className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No clients found</h3>
+            <p className="text-gray-600 mb-6">
+              {searchTerm || filterStatus !== 'all' 
+                ? 'Try adjusting your search or filter criteria'
+                : 'Get started by adding your first client'
+              }
+            </p>
+            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+              Add New Client
+            </button>
+          </div>
+        )}
+      </div>
     </div>
-  )
-} 
+  );
+}

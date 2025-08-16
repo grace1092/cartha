@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/lib/context/AuthContext';
+import Link from 'next/link';
 import { 
   User, 
   Calendar, 
@@ -13,7 +14,19 @@ import {
   AlertTriangle,
   CheckCircle,
   Building,
-  Mail
+  Mail,
+  FileText,
+  DollarSign,
+  Users,
+  TrendingUp,
+  Activity,
+  Bell,
+  Phone,
+  MessageSquare,
+  BookOpen,
+  Target,
+  BarChart3,
+  Plus
 } from 'lucide-react';
 
 export default function UserDashboard() {
@@ -55,13 +68,21 @@ export default function UserDashboard() {
                 </div>
               )}
             </div>
-            <button
-              onClick={handleSignOut}
-              className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
-            >
-              <LogOut className="w-4 h-4" />
-              <span>Sign Out</span>
-            </button>
+            <div className="flex items-center space-x-4">
+              <Link 
+                href="/"
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                ← Back to Home
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Sign Out</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -98,7 +119,7 @@ export default function UserDashboard() {
                       : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
-                  <User className="w-5 h-5" />
+                  <BarChart3 className="w-5 h-5" />
                   <span>Overview</span>
                 </button>
                 <button
@@ -158,27 +179,126 @@ export default function UserDashboard() {
                   </div>
                 )}
 
-                {/* Quick Access Tools */}
+                {/* Quick Stats */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-600">Total Clients</p>
+                        <p className="text-2xl font-bold text-gray-900">24</p>
+                        <p className="text-xs text-green-600 mt-1">+3 this month</p>
+                      </div>
+                      <Users className="w-8 h-8 text-blue-500" />
+                    </div>
+                  </div>
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-600">This Week's Sessions</p>
+                        <p className="text-2xl font-bold text-gray-900">18</p>
+                        <p className="text-xs text-blue-600 mt-1">2 scheduled today</p>
+                      </div>
+                      <Calendar className="w-8 h-8 text-green-500" />
+                    </div>
+                  </div>
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-600">Outstanding Notes</p>
+                        <p className="text-2xl font-bold text-gray-900">3</p>
+                        <p className="text-xs text-orange-600 mt-1">Due within 24hrs</p>
+                      </div>
+                      <FileText className="w-8 h-8 text-orange-500" />
+                    </div>
+                  </div>
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-600">Monthly Revenue</p>
+                        <p className="text-2xl font-bold text-gray-900">$8,400</p>
+                        <p className="text-xs text-green-600 mt-1">+12% vs last month</p>
+                      </div>
+                      <DollarSign className="w-8 h-8 text-purple-500" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Core Features */}
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Access</h2>
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-semibold text-gray-900">Core Features</h2>
+                    <span className="text-sm text-gray-500">Lightweight client management that works</span>
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {[
-                      { name: 'AI Session Notes', icon: '📝', href: '#session-notes' },
-                      { name: 'Follow-up Emails', icon: '📧', href: '#follow-up' },
-                      { name: 'Client Management', icon: '👥', href: '#clients' },
-                      { name: 'Security & Compliance', icon: '🔒', href: '#security' },
-                      { name: 'Smart Scheduling', icon: '📅', href: '#scheduling' },
-                      { name: 'Practice Analytics', icon: '📊', href: '#analytics' }
-                    ].map((tool) => (
-                      <a
-                        key={tool.name}
-                        href={tool.href}
-                        className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all duration-200"
-                      >
-                        <span className="text-2xl">{tool.icon}</span>
-                        <span className="font-medium text-gray-900">{tool.name}</span>
-                      </a>
-                    ))}
+                      { 
+                        name: 'AI Session Notes', 
+                        icon: FileText, 
+                        href: '/dashboard/sessions', 
+                        description: 'Generate comprehensive notes with AI assistance',
+                        status: 'active',
+                        color: 'text-blue-500'
+                      },
+                      { 
+                        name: 'Client Management', 
+                        icon: Users, 
+                        href: '/dashboard/clients', 
+                        description: 'Organize and track all your client information',
+                        status: 'active',
+                        color: 'text-green-500'
+                      },
+                      { 
+                        name: 'Smart Scheduling', 
+                        icon: Calendar, 
+                        href: '/dashboard/calendar', 
+                        description: 'Intelligent appointment scheduling',
+                        status: 'active',
+                        color: 'text-purple-500'
+                      },
+                      { 
+                        name: 'Billing & Invoicing', 
+                        icon: CreditCard, 
+                        href: '/dashboard/billing', 
+                        description: 'Automated billing and payment tracking',
+                        status: 'active',
+                        color: 'text-orange-500'
+                      },
+                      { 
+                        name: 'Follow-up Automation', 
+                        icon: Mail, 
+                        href: '/dashboard/communications', 
+                        description: 'Automated follow-up emails and reminders',
+                        status: 'active',
+                        color: 'text-pink-500'
+                      },
+                      { 
+                        name: 'Practice Analytics', 
+                        icon: TrendingUp, 
+                        href: '/dashboard/analytics', 
+                        description: 'Insights into your practice performance',
+                        status: 'active',
+                        color: 'text-indigo-500'
+                      }
+                    ].map((tool) => {
+                      const IconComponent = tool.icon;
+                      return (
+                        <Link
+                          key={tool.name}
+                          href={tool.href}
+                          className="flex flex-col space-y-3 p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 group"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <IconComponent className={`w-6 h-6 ${tool.color}`} />
+                            <span className="font-medium text-gray-900 group-hover:text-blue-700">{tool.name}</span>
+                          </div>
+                          <p className="text-sm text-gray-600">{tool.description}</p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded-full">Active</span>
+                            <span className="text-xs text-blue-600 group-hover:text-blue-700">Open →</span>
+                          </div>
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -186,14 +306,57 @@ export default function UserDashboard() {
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                   <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
                   <div className="space-y-3">
-                    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-sm text-gray-600">Welcome to TherapyNotes! Your account was created successfully.</span>
+                    <div className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                      <CheckCircle className="w-5 h-5 text-green-500 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">Session completed with Maria Rodriguez</p>
+                        <p className="text-xs text-gray-500">2 hours ago • Notes auto-generated and saved</p>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-sm text-gray-600">Your 30-day free trial has started.</span>
+                    <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                      <Calendar className="w-5 h-5 text-blue-500 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">New appointment scheduled</p>
+                        <p className="text-xs text-gray-500">4 hours ago • John Smith, Thursday 2:00 PM</p>
+                      </div>
                     </div>
+                    <div className="flex items-start space-x-3 p-3 bg-orange-50 rounded-lg border border-orange-200">
+                      <FileText className="w-5 h-5 text-orange-500 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">Session note reminder</p>
+                        <p className="text-xs text-gray-500">6 hours ago • Please complete notes for yesterday's session with Alex Chen</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                      <Activity className="w-5 h-5 text-gray-500 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">Welcome to Cartha!</p>
+                        <p className="text-xs text-gray-500">Your account was created successfully. Start by adding your first client.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <button className="flex items-center space-x-2 p-3 border border-blue-200 rounded-lg bg-blue-50 hover:bg-blue-100 transition-colors">
+                      <Plus className="w-5 h-5 text-blue-600" />
+                      <span className="text-sm font-medium text-blue-700">Add New Client</span>
+                    </button>
+                    <button className="flex items-center space-x-2 p-3 border border-green-200 rounded-lg bg-green-50 hover:bg-green-100 transition-colors">
+                      <Calendar className="w-5 h-5 text-green-600" />
+                      <span className="text-sm font-medium text-green-700">Schedule Session</span>
+                    </button>
+                    <button className="flex items-center space-x-2 p-3 border border-purple-200 rounded-lg bg-purple-50 hover:bg-purple-100 transition-colors">
+                      <FileText className="w-5 h-5 text-purple-600" />
+                      <span className="text-sm font-medium text-purple-700">Create Note</span>
+                    </button>
+                    <button className="flex items-center space-x-2 p-3 border border-orange-200 rounded-lg bg-orange-50 hover:bg-orange-100 transition-colors">
+                      <DollarSign className="w-5 h-5 text-orange-600" />
+                      <span className="text-sm font-medium text-orange-700">Send Invoice</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -250,6 +413,24 @@ export default function UserDashboard() {
                       readOnly
                     />
                   </div>
+                  
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Account Information</h3>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600">Account Type</span>
+                        <span className="text-sm font-medium text-gray-900">{user.isTrial ? 'Free Trial' : 'Paid Account'}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600">Account Created</span>
+                        <span className="text-sm font-medium text-gray-900">{new Date(user.createdAt).toLocaleDateString()}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600">Current Plan</span>
+                        <span className="text-sm font-medium text-gray-900">{user.subscriptionTier.charAt(0).toUpperCase() + user.subscriptionTier.slice(1)}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -280,19 +461,57 @@ export default function UserDashboard() {
                   {/* Upgrade Options */}
                   <div>
                     <h3 className="text-lg font-medium text-gray-900 mb-4">Upgrade Options</h3>
+                    <p className="text-gray-600 mb-6">Choose the plan that fits your practice size and needs.</p>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       {[
-                        { name: 'Basic', price: '$29', features: ['AI Session Notes', 'Basic Analytics'] },
-                        { name: 'Professional', price: '$59', features: ['All Basic features', 'Follow-up Emails', 'Advanced Analytics'] },
-                        { name: 'Enterprise', price: '$99', features: ['All Professional features', 'Priority Support', 'Custom Integrations'] }
+                        { 
+                          name: 'Solo Practitioner', 
+                          price: '$49', 
+                          features: [
+                            'AI-powered session notes',
+                            'Client progress tracking',
+                            'Automated follow-ups',
+                            'HIPAA-compliant security',
+                            'Mobile app access',
+                            'Billing & invoicing',
+                            'Email support'
+                          ] 
+                        },
+                        { 
+                          name: 'Small Group Practice', 
+                          price: '$149', 
+                          subtitle: '2-10 practitioners',
+                          features: [
+                            'Everything in Solo, plus:',
+                            'Multi-user collaboration',
+                            'Advanced analytics',
+                            'Custom client forms',
+                            'Team scheduling',
+                            'Priority phone support'
+                          ] 
+                        },
+                        { 
+                          name: 'Large Organization', 
+                          price: '$499', 
+                          subtitle: '10+ practitioners',
+                          features: [
+                            'Everything in Small Group, plus:',
+                            'Unlimited users & locations',
+                            'Dedicated account manager',
+                            'Custom API access',
+                            'Advanced security',
+                            '24/7 priority support'
+                          ] 
+                        }
                       ].map((plan) => (
-                        <div key={plan.name} className="border border-gray-200 rounded-lg p-4">
+                        <div key={plan.name} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
                           <h4 className="font-medium text-gray-900 mb-2">{plan.name}</h4>
-                          <p className="text-2xl font-bold text-gray-900 mb-3">{plan.price}<span className="text-sm font-normal text-gray-600">/month</span></p>
+                          <p className="text-2xl font-bold text-gray-900 mb-1">{plan.price}<span className="text-sm font-normal text-gray-600">/month</span></p>
+                          {plan.subtitle && <p className="text-sm text-gray-600 mb-3">{plan.subtitle}</p>}
                           <ul className="space-y-1 text-sm text-gray-600 mb-4">
                             {plan.features.map((feature) => (
-                              <li key={feature} className="flex items-center">
-                                <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                              <li key={feature} className="flex items-start">
+                                <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
                                 {feature}
                               </li>
                             ))}
@@ -312,4 +531,4 @@ export default function UserDashboard() {
       </div>
     </div>
   );
-} 
+}

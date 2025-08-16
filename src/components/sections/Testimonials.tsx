@@ -37,17 +37,17 @@ export default function Testimonials() {
   ]
 
   return (
-    <section className="py-20 lg:py-28 bg-white">
+    <section className="py-20 lg:py-28 section-testimonials">
       <div className="container-modern">
         {/* Section Header */}
         <div className="text-center mb-16">
           <div className="scroll-reveal">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-heading mb-6">
               What therapists are saying
             </h2>
           </div>
           <div className="scroll-reveal" style={{ animationDelay: '0.2s' }}>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-body max-w-2xl mx-auto">
               Join hundreds of satisfied therapists who have transformed their practice with Cartha
             </p>
           </div>
@@ -61,9 +61,9 @@ export default function Testimonials() {
               className="scroll-reveal group"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 shadow-lg border border-blue-100 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 h-full">
+              <div className="bg-card rounded-2xl p-8 shadow-lg border border-card-border hover:shadow-xl hover:scale-[1.02] transition-all duration-300 h-full">
                 {/* Quote Icon */}
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                   <Quote className="w-6 h-6 text-white" />
                 </div>
 
@@ -75,19 +75,19 @@ export default function Testimonials() {
                 </div>
 
                 {/* Content */}
-                <blockquote className="text-gray-700 mb-8 leading-relaxed italic">
+                <blockquote className="text-body mb-8 leading-relaxed italic">
                   "{testimonial.content}"
                 </blockquote>
 
                 {/* Author */}
                 <div className="flex items-center">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-lg mr-4">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center text-white font-semibold text-lg mr-4">
                     {testimonial.avatar}
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900">{testimonial.name}</div>
-                    <div className="text-sm text-gray-600">{testimonial.role}</div>
-                    <div className="text-sm text-blue-600">{testimonial.practice}</div>
+                    <div className="font-semibold text-heading">{testimonial.name}</div>
+                    <div className="text-sm text-muted">{testimonial.role}</div>
+                    <div className="text-sm text-primary-600">{testimonial.practice}</div>
                   </div>
                 </div>
               </div>
@@ -98,18 +98,18 @@ export default function Testimonials() {
         {/* Bottom CTA */}
         <div className="text-center mt-16">
           <div className="scroll-reveal" style={{ animationDelay: '0.4s' }}>
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-12 max-w-4xl mx-auto text-white shadow-2xl">
+            <div className="bg-gradient-to-r from-primary-600 to-purple-600 rounded-2xl p-12 max-w-4xl mx-auto text-white shadow-2xl">
               <h3 className="text-2xl md:text-3xl font-bold mb-6">
                 Ready to join them?
               </h3>
-              <p className="text-lg mb-8 text-blue-100 leading-relaxed">
+              <p className="text-lg mb-8 text-primary-100 leading-relaxed">
                 Start your free trial today and see why hundreds of therapists choose Cartha
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-white text-blue-600 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                <button className="bg-white text-primary-600 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg">
                   Start Free Trial
                 </button>
-                <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300 transform hover:scale-105">
+                <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-white hover:text-primary-600 transition-all duration-300 transform hover:scale-105">
                   Schedule Demo
                 </button>
               </div>

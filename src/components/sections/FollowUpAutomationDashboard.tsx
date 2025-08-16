@@ -24,7 +24,11 @@ import {
   Shield
 } from 'lucide-react'
 
-export default function FollowUpAutomationDashboard() {
+interface FollowUpAutomationDashboardProps {
+  onClose?: () => void;
+}
+
+export default function FollowUpAutomationDashboard({ onClose }: FollowUpAutomationDashboardProps) {
   const [currentStep, setCurrentStep] = useState(0)
   const [selectedClient, setSelectedClient] = useState('Sarah Johnson')
   const [selectedTemplate, setSelectedTemplate] = useState('check-in')
@@ -233,7 +237,7 @@ Dr. Smith
                 </div>
               </div>
               <button 
-                onClick={() => setShowDashboard(false)}
+                onClick={onClose}
                 className="text-white hover:text-green-100 transition-colors"
               >
                 <X className="w-6 h-6" />
@@ -375,7 +379,7 @@ Dr. Smith
               <p className="text-gray-600">Personalized client engagement that saves time and improves outcomes</p>
             </div>
             <button 
-              onClick={() => setShowDashboard(false)}
+              onClick={onClose}
               className="text-gray-400 hover:text-gray-600 transition-colors"
             >
               <X className="w-6 h-6" />

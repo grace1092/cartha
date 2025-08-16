@@ -2,27 +2,31 @@
 
 import { useState } from 'react'
 import { 
-  Search, 
-  Filter, 
-  Calendar, 
-  Clock, 
-  User, 
   FileText, 
-  Eye, 
-  Edit, 
-  Trash2, 
-  Download,
-  X,
-  ChevronRight,
-  Target,
-  TrendingUp,
+  User, 
+  Clock, 
+  Calendar, 
+  Target, 
+  TrendingUp, 
   AlertCircle,
   CheckCircle,
-  Clock as ClockIcon
+  ChevronRight,
+  X,
+  Search,
+  Filter,
+  Download,
+  Edit,
+  Trash2,
+  Eye,
+  MoreHorizontal
 } from 'lucide-react'
 import { useSessionNotes, SessionNote } from '@/lib/context/SessionNotesContext'
 
-export default function MySessions() {
+interface MySessionsProps {
+  onClose?: () => void;
+}
+
+export default function MySessions({ onClose }: MySessionsProps) {
   const { state, deleteSession, setCurrentSession } = useSessionNotes()
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState<'all' | 'completed' | 'draft'>('all')
@@ -92,7 +96,7 @@ export default function MySessions() {
               </div>
               <div className="flex items-center space-x-3">
                 <button
-                  onClick={() => setViewMode('list')}
+                  onClick={onClose}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   <X className="w-6 h-6" />
@@ -260,7 +264,7 @@ export default function MySessions() {
               <p className="text-gray-600">Access and manage your saved session notes</p>
             </div>
             <button 
-              onClick={() => setCurrentSession(null)}
+              onClick={onClose}
               className="text-gray-400 hover:text-gray-600 transition-colors"
             >
               <X className="w-6 h-6" />
@@ -298,12 +302,7 @@ export default function MySessions() {
 
         {/* Sessions List */}
         <div className="p-6">
-          {state.isLoading ? (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="text-gray-600 mt-2">Loading sessions...</p>
-            </div>
-          ) : filteredSessions.length === 0 ? (
+          {filteredSessions.length === 0 ? (
             <div className="text-center py-12">
               <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">No sessions found</h3>
@@ -337,7 +336,7 @@ export default function MySessions() {
                           <span>{formatDate(session.date)}</span>
                         </div>
                         <div className="flex items-center space-x-2 text-sm text-gray-600">
-                          <ClockIcon className="w-4 h-4" />
+                          <Clock className="w-4 h-4" />
                           <span>{session.sessionDuration}</span>
                         </div>
                         <div className="flex items-center space-x-2 text-sm text-gray-600">

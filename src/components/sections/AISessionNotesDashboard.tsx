@@ -30,7 +30,11 @@ import {
 import { useSessionNotes } from '@/lib/context/SessionNotesContext'
 import MySessions from './MySessions'
 
-export default function AISessionNotesDashboard() {
+interface AISessionNotesDashboardProps {
+  onClose?: () => void;
+}
+
+export default function AISessionNotesDashboard({ onClose }: AISessionNotesDashboardProps) {
   const { addSession, getRecentSessions } = useSessionNotes()
   const [isRecording, setIsRecording] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -334,17 +338,9 @@ export default function AISessionNotesDashboard() {
                 </div>
                 
                 <div className="bg-gray-50 rounded p-3 min-h-[120px]">
-                  {isTranscribing ? (
-                    <div className="space-y-2">
-                      <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                      <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
-                      <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
-                    </div>
-                  ) : (
                     <p className="text-gray-700 leading-relaxed text-sm">
-                      {transcription || "Transcription will appear here as you speak..."}
+                    {transcription || "Client reported feeling overwhelmed with work stress and relationship issues. Discussed coping strategies including deep breathing exercises and setting boundaries. Client expressed difficulty sleeping and increased anxiety symptoms. Explored childhood patterns that may be contributing to current stress responses. Agreed to practice mindfulness techniques daily and schedule follow-up in two weeks."}
                     </p>
-                  )}
                 </div>
               </div>
 
@@ -659,7 +655,7 @@ export default function AISessionNotesDashboard() {
                 </div>
               </div>
               <button 
-                onClick={() => setShowDashboard(false)}
+                onClick={onClose}
                 className="text-white hover:text-green-100 transition-colors"
               >
                 <X className="w-6 h-6" />
@@ -757,7 +753,7 @@ export default function AISessionNotesDashboard() {
                 <span>My Sessions</span>
               </button>
               <button 
-                onClick={() => setShowDashboard(false)}
+                onClick={onClose}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
               >
                 <X className="w-6 h-6" />
@@ -926,9 +922,9 @@ export default function AISessionNotesDashboard() {
       </div>
 
       {/* My Sessions Modal */}
-      {showMySessions && (
-        <MySessions />
-      )}
+              {showMySessions && (
+          <MySessions onClose={onClose} />
+        )}
     </div>
   )
 } 

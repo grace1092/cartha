@@ -39,9 +39,12 @@ import {
   Activity
 } from 'lucide-react'
 
-export default function SmartSchedulingDashboard() {
+interface SmartSchedulingDashboardProps {
+  onClose?: () => void;
+}
+
+export default function SmartSchedulingDashboard({ onClose }: SmartSchedulingDashboardProps) {
   const [currentView, setCurrentView] = useState('overview')
-  const [showDashboard, setShowDashboard] = useState(false)
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [bookingEfficiency, setBookingEfficiency] = useState(94)
 
@@ -117,39 +120,34 @@ export default function SmartSchedulingDashboard() {
     { action: 'Reschedule offer sent to David Kim', time: '2024-02-19 2:00 PM', type: 'reschedule', status: 'sent' }
   ]
 
-  useEffect(() => {
-    // Simulate dashboard loading
-    setTimeout(() => {
-      setShowDashboard(true)
-    }, 1000)
-  }, [])
+  // Remove useEffect and showDashboard logic
 
   const optimizeSchedule = () => {
     setBookingEfficiency(prev => Math.min(100, prev + 2))
   }
 
-  if (showDashboard) {
-    return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl max-w-7xl w-full max-h-[90vh] overflow-y-auto">
-          {/* Success Banner */}
-          <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 rounded-t-2xl">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <Calendar className="w-8 h-8" />
-                <div>
-                  <h3 className="text-xl font-bold">Smart Scheduling Active!</h3>
-                  <p className="text-blue-100">Intelligent calendar optimization and automated management</p>
-                </div>
+  // Render dashboard content immediately
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl max-w-7xl w-full max-h-[90vh] overflow-y-auto">
+        {/* Success Banner */}
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 rounded-t-2xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <Calendar className="w-8 h-8" />
+              <div>
+                <h3 className="text-xl font-bold">Smart Scheduling Active!</h3>
+                <p className="text-blue-100">Intelligent calendar optimization and automated management</p>
               </div>
-              <button 
-                onClick={() => setShowDashboard(false)}
-                className="text-white hover:text-blue-100 transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
             </div>
+            <button 
+              onClick={onClose}
+              className="text-white hover:text-blue-100 transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
           </div>
+        </div>
 
           {/* Impact Banner */}
           <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6">
@@ -499,17 +497,4 @@ export default function SmartSchedulingDashboard() {
         </div>
       </div>
     )
-  }
-
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-4xl w-full p-8 text-center">
-        <div className="w-16 h-16 mx-auto mb-6 bg-blue-500 rounded-full flex items-center justify-center">
-          <Calendar className="w-8 h-8 text-white" />
-        </div>
-        <h3 className="text-xl font-semibold text-gray-900 mb-4">Loading Smart Scheduling Dashboard</h3>
-        <p className="text-gray-600">Initializing calendar optimization and automated scheduling systems...</p>
-      </div>
-    </div>
-  )
-} 
+  } 

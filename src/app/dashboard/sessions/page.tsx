@@ -68,13 +68,7 @@ export default function SessionsPage() {
     setFilteredSessions(filtered)
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
-      </div>
-    )
-  }
+  // Remove loading state to show content immediately
 
   return (
     <div className="px-4 lg:px-8">
