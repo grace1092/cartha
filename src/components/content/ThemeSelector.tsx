@@ -16,7 +16,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { ContentTheme } from '@/lib/types/content';
 import Button from '@/components/ui/Button';
-import Card from '@/components/ui/Card';
+import { Card } from '@/components/ui/Card';
 
 interface ThemeSelectorProps {
   themes: ContentTheme[];

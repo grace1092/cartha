@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion'
-import Card from '../ui/Card'
+import { Card } from '../ui/Card'
 import { HeartIcon, CheckBadgeIcon, RocketLaunchIcon } from '@heroicons/react/24/outline'
 
 const outcomes = [

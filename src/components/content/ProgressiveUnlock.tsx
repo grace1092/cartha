@@ -16,7 +16,7 @@ import {
 import { CheckCircleIcon as CheckCircleSolidIcon, StarIcon as StarSolidIcon } from '@heroicons/react/24/solid';
 import { ContentDeck, ContentCard, UserDeckProgress } from '@/lib/types/content';
 import Button from '@/components/ui/Button';
-import Card from '@/components/ui/Card';
+import { Card } from '@/components/ui/Card';
 
 interface ProgressiveUnlockProps {
   deck: ContentDeck;

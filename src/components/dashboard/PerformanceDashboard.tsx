@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Card from '@/components/ui/Card';
+import { Card } from '@/components/ui/Card';
 import CardContent from '@/components/ui/Card';
 import CardHeader from '@/components/ui/Card';
 import CardTitle from '@/components/ui/Card';

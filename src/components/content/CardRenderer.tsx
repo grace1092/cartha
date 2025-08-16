@@ -21,7 +21,7 @@ import {
 import { HeartIcon as HeartSolidIcon } from '@heroicons/react/24/solid';
 import { ContentCard, ContentDeck } from '@/lib/types/content';
 import Button from '@/components/ui/Button';
-import Card from '@/components/ui/Card';
+import { Card } from '@/components/ui/Card';
 
 interface CardRendererProps {
   card: ContentCard;

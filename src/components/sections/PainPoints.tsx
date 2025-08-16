@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { ExclamationTriangleIcon, FireIcon, ChatBubbleBottomCenterTextIcon, HeartIcon } from '@heroicons/react/24/outline'
-import Card from '../ui/Card'
+import { Card } from '../ui/Card'
 
 const painPoints = [
   {

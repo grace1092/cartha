@@ -17,7 +17,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { ContentDeck, ContentCard, ContentTheme, DeckCreationData } from '@/lib/types/content';
 import Button from '@/components/ui/Button';
-import Card from '@/components/ui/Card';
+import { Card } from '@/components/ui/Card';
 
 interface ContentCMSProps {
   mode: 'create' | 'edit';

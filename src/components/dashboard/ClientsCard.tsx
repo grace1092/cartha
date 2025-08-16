@@ -1,16 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Users, Plus, X } from 'lucide-react';
+import { Users, Plus, X, Trash2, Edit } from 'lucide-react';
 import { Card, CardHeader, CardContent } from '@/components/ui/Card';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-
-const demoClients = [
-  { id: 1, name: 'Sarah J.', lastSession: '2 days ago', status: 'Active', nextAppt: 'Today 3:00 PM' },
-  { id: 2, name: 'Michael R.', lastSession: '1 week ago', status: 'Active', nextAppt: 'Tomorrow 10:00 AM' },
-  { id: 3, name: 'Emma K.', lastSession: '3 days ago', status: 'Active', nextAppt: 'Friday 2:00 PM' },
-  { id: 4, name: 'David L.', lastSession: '2 weeks ago', status: 'Inactive', nextAppt: 'Not scheduled' },
-];
+import { useDashboard } from '@/lib/context/DashboardContext';
 
 const progressData = [
   { week: 'W1', score: 3.2 },
@@ -24,22 +18,27 @@ const progressData = [
 ];
 
 export default function ClientsCard() {
-  const [clients, setClients] = useState(demoClients);
+  const { clients, addClient, updateClient, deleteClient } = useDashboard();
   const [showModal, setShowModal] = useState(false);
-  const [newClient, setNewClient] = useState({ name: '', email: '', notes: '' });
+  const [newClient, setNewClient] = useState({ name: '', email: '', phone: '', notes: '' });
 
   const handleAddClient = () => {
     if (newClient.name.trim()) {
-      const client = {
-        id: clients.length + 1,
+      addClient({
         name: newClient.name,
-        lastSession: 'Never',
-        status: 'New',
+        email: newClient.email,
+        phone: newClient.phone,
+        notes: newClient.notes,
         nextAppt: 'Not scheduled'
-      };
-      setClients([...clients, client]);
-      setNewClient({ name: '', email: '', notes: '' });
+      });
+      setNewClient({ name: '', email: '', phone: '', notes: '' });
       setShowModal(false);
+    }
+  };
+
+  const handleDeleteClient = (clientId: string) => {
+    if (confirm('Are you sure you want to delete this client? This will also delete all related notes and appointments.')) {
+      deleteClient(clientId);
     }
   };
 
@@ -75,19 +74,25 @@ export default function ClientsCard() {
             <thead>
               <tr className="border-b border-neutral-200">
                 <th className="text-left py-2 px-2 text-sm font-medium text-neutral-600">Name</th>
-                <th className="text-left py-2 px-2 text-sm font-medium text-neutral-600">Last Session</th>
+                <th className="text-left py-2 px-2 text-sm font-medium text-neutral-600">Email</th>
                 <th className="text-left py-2 px-2 text-sm font-medium text-neutral-600">Status</th>
                 <th className="text-left py-2 px-2 text-sm font-medium text-neutral-600">Next Appointment</th>
+                <th className="text-left py-2 px-2 text-sm font-medium text-neutral-600">Actions</th>
               </tr>
             </thead>
             <tbody>
               {clients.map((client) => (
                 <tr key={client.id} className="border-b border-neutral-100">
                   <td className="py-3 px-2">
-                    <span className="text-sm font-medium text-[#222]">{client.name}</span>
+                    <div>
+                      <span className="text-sm font-medium text-[#222]">{client.name}</span>
+                      {client.phone && (
+                        <div className="text-xs text-neutral-500">{client.phone}</div>
+                      )}
+                    </div>
                   </td>
                   <td className="py-3 px-2">
-                    <span className="text-sm text-neutral-600">{client.lastSession}</span>
+                    <span className="text-sm text-neutral-600">{client.email}</span>
                   </td>
                   <td className="py-3 px-2">
                     <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(client.status)}`}>
@@ -95,7 +100,18 @@ export default function ClientsCard() {
                     </span>
                   </td>
                   <td className="py-3 px-2">
-                    <span className="text-sm text-neutral-600">{client.nextAppt}</span>
+                    <span className="text-sm text-neutral-600">{client.nextAppt || 'Not scheduled'}</span>
+                  </td>
+                  <td className="py-3 px-2">
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleDeleteClient(client.id)}
+                        className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
+                        title="Delete client"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -166,6 +182,19 @@ export default function ClientsCard() {
                     onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
                     className="w-full border border-neutral-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-neutral-300"
                     placeholder="client@example.com"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-[#222] mb-1">
+                    Phone (Optional)
+                  </label>
+                  <input
+                    type="tel"
+                    value={newClient.phone}
+                    onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
+                    className="w-full border border-neutral-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-neutral-300"
+                    placeholder="(555) 123-4567"
                   />
                 </div>
                 

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion'
-import Card from '../ui/Card'
+import { Card } from '../ui/Card'
 import { APP_CONSTANTS } from '@/lib/utils'
 import {
   CreditCardIcon,
