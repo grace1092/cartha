@@ -1,12 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-);
+function getSupabaseClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  
+  if (!url || !key) {
+    throw new Error('Missing Supabase environment variables');
+  }
+  
+  return createClient(url, key);
+}
 
 export async function GET(request: NextRequest) {
+  // Check if we're in build time
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return NextResponse.json({ error: 'Service unavailable' }, { status: 503 });
+  }
+  
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action');
 
@@ -31,6 +42,11 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  // Check if we're in build time
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return NextResponse.json({ error: 'Service unavailable' }, { status: 503 });
+  }
+  
   try {
     const body = await request.json();
     const { action } = body;
@@ -55,6 +71,7 @@ export async function POST(request: NextRequest) {
 }
 
 async function getStats() {
+  const supabase = getSupabaseClient();
   const { data: subscribers, error } = await supabase
     .from('waitlist_subscribers')
     .select('*');
@@ -88,6 +105,7 @@ async function getStats() {
 }
 
 async function getSubscribers(request: NextRequest) {
+  const supabase = getSupabaseClient();
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get('page') || '1');
   const limit = parseInt(searchParams.get('limit') || '50');
@@ -143,6 +161,7 @@ async function getSubscribers(request: NextRequest) {
 }
 
 async function exportData(request: NextRequest) {
+  const supabase = getSupabaseClient();
   const { searchParams } = new URL(request.url);
   const type = searchParams.get('type') || 'csv';
   const filtersParam = searchParams.get('filters');
@@ -249,6 +268,7 @@ async function exportData(request: NextRequest) {
 
 async function updateSubscriber(body: any) {
   const { subscriber_id, ...updates } = body;
+  const supabase = getSupabaseClient();
 
   const { error } = await supabase
     .from('waitlist_subscribers')
@@ -271,6 +291,7 @@ async function updateSubscriber(body: any) {
 
 async function deleteSubscriber(body: any) {
   const { subscriber_id } = body;
+  const supabase = getSupabaseClient();
 
   const { error } = await supabase
     .from('waitlist_subscribers')
