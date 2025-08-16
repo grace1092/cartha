@@ -19,8 +19,12 @@ export default function RequireAuth({ children, fallback }: RequireAuthProps) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabase.auth.getSession();
         
+        if (error) {
+          throw error;
+        }
+
         // For demo purposes, if no session but we're on dashboard, create a demo user
         if (!session && typeof window !== 'undefined' && window.location.pathname.startsWith('/dashboard')) {
           const demoUser: User = {
@@ -43,6 +47,7 @@ export default function RequireAuth({ children, fallback }: RequireAuthProps) {
       } catch (error) {
         console.error('Auth check error:', error);
         setUser(null);
+        router.replace('/auth/signin?error=session_error');
       } finally {
         setLoading(false);
       }
@@ -51,14 +56,22 @@ export default function RequireAuth({ children, fallback }: RequireAuthProps) {
     checkAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user || null);
+      async (event, session) => {
+        if (event === 'SIGNED_IN') {
+          setUser(session?.user || null);
+          router.replace('/dashboard');
+        } else if (event === 'SIGNED_OUT') {
+          setUser(null);
+          router.replace('/auth/signin');
+        } else if (event === 'TOKEN_REFRESHED') {
+          setUser(session?.user || null);
+        }
         setLoading(false);
       }
     );
 
     return () => subscription.unsubscribe();
-  }, [supabase.auth]);
+  }, [router, supabase.auth]);
 
   if (loading) {
     return (
