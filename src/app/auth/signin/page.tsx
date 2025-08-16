@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { createClientSupabaseClient } from '@/lib/supabase/browserClient';
 
 export default function SignInPage() {
@@ -35,13 +36,13 @@ export default function SignInPage() {
     }
   };
 
-  const handleDemoLogin = () => {
+  const handleDemoLogin = (e: React.MouseEvent) => {
+    e.preventDefault();
     // For demo purposes, simulate a login
     setLoading(true);
-    setTimeout(() => {
-      // Direct navigation to dashboard for demo
-      window.location.href = '/dashboard';
-    }, 500);
+    // Use absolute URL to ensure correct routing
+    const baseUrl = window.location.origin;
+    window.location.href = `${baseUrl}/dashboard`;
   };
 
   return (
@@ -60,13 +61,12 @@ export default function SignInPage() {
 
           {/* Demo Login */}
           <div className="mb-6">
-            <button
-              onClick={handleDemoLogin}
-              disabled={loading}
-              className="w-full bg-black text-white rounded-xl px-4 py-3 font-medium hover:bg-neutral-900 disabled:opacity-50 transition-colors"
+            <Link
+              href="/dashboard"
+              className="block w-full bg-black text-white rounded-xl px-4 py-3 font-medium hover:bg-neutral-900 disabled:opacity-50 transition-colors text-center"
             >
-              {loading ? 'Signing in...' : 'Try Demo Dashboard'}
-            </button>
+              Try Demo Dashboard
+            </Link>
             <p className="text-xs text-neutral-500 text-center mt-2">
               No account needed • Demo data only
             </p>
