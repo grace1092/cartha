@@ -29,6 +29,7 @@ export default function ClientsCard() {
         email: newClient.email,
         phone: newClient.phone,
         notes: newClient.notes,
+        status: 'New',
         nextAppt: 'Not scheduled'
       });
       setNewClient({ name: '', email: '', phone: '', notes: '' });

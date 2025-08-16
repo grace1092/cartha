@@ -1,10 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/Card';
-import CardContent from '@/components/ui/Card';
-import CardHeader from '@/components/ui/Card';
-import CardTitle from '@/components/ui/Card';
+import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Progress from '@/components/ui/Progress';
 import { performanceMonitor } from '@/lib/performance/monitor';
@@ -126,12 +123,7 @@ export default function PerformanceDashboard() {
 
       {/* Performance Score */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Target className="h-5 w-5" />
-            <span>Overall Performance Score</span>
-          </CardTitle>
-        </CardHeader>
+        <CardHeader title="Overall Performance Score" icon={Target} />
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -168,8 +160,8 @@ export default function PerformanceDashboard() {
 
           return (
             <Card key={metric}>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium flex items-center justify-between">
+              <div className="p-6 pb-2">
+                <h3 className="text-sm font-medium flex items-center justify-between">
                   <span>{metric}</span>
                   {isGood ? (
                     <TrendingUp className="h-4 w-4 text-green-600" />
@@ -178,8 +170,8 @@ export default function PerformanceDashboard() {
                   ) : (
                     <Activity className="h-4 w-4 text-yellow-600" />
                   )}
-                </CardTitle>
-              </CardHeader>
+                </h3>
+              </div>
               <CardContent>
                 <div className="space-y-2">
                   <div className="text-2xl font-bold">
@@ -206,12 +198,7 @@ export default function PerformanceDashboard() {
       {/* Custom Metrics */}
       {performanceData.customMetrics.length > 0 && (
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Clock className="h-5 w-5" />
-              <span>Custom Metrics</span>
-            </CardTitle>
-          </CardHeader>
+          <CardHeader title="Custom Metrics" icon={Clock} />
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {performanceData.customMetrics.slice(0, 9).map((metric, index) => (
@@ -234,9 +221,7 @@ export default function PerformanceDashboard() {
 
       {/* Performance Tips */}
       <Card>
-        <CardHeader>
-          <CardTitle>Performance Recommendations</CardTitle>
-        </CardHeader>
+        <CardHeader title="Performance Recommendations" />
         <CardContent>
           <div className="space-y-3">
             {performanceData.performanceScore < 90 && (

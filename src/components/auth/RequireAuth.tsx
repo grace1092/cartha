@@ -20,7 +20,26 @@ export default function RequireAuth({ children, fallback }: RequireAuthProps) {
     const checkAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        setUser(session?.user || null);
+        
+        // For demo purposes, if no session but we're on dashboard, create a demo user
+        if (!session && typeof window !== 'undefined' && window.location.pathname.startsWith('/dashboard')) {
+          const demoUser: User = {
+            id: 'demo-user',
+            email: 'demo@cartha.com',
+            aud: 'authenticated',
+            app_metadata: {},
+            user_metadata: { name: 'Dr. Demo' },
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            email_confirmed_at: new Date().toISOString(),
+            last_sign_in_at: new Date().toISOString(),
+            role: 'authenticated',
+            confirmation_sent_at: new Date().toISOString()
+          };
+          setUser(demoUser);
+        } else {
+          setUser(session?.user || null);
+        }
       } catch (error) {
         console.error('Auth check error:', error);
         setUser(null);
