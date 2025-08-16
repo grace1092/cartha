@@ -62,7 +62,7 @@ export default function Pricing() {
       gradient: 'from-blue-500 to-cyan-500',
       popular: false,
       // Beta Launch Pricing (first 10 signups, locked for life)
-      foundingMemberPrice: 20,
+      foundingMemberPrice: 50,
       savings: 'Locked for life'
     },
     {
@@ -85,7 +85,7 @@ export default function Pricing() {
       gradient: 'from-purple-500 to-pink-500',
       popular: true,
       // Beta Launch Pricing (first 10 signups, locked for life)
-      foundingMemberPrice: 60,
+      foundingMemberPrice: 150,
       savings: 'Locked for life'
     },
     {
@@ -108,7 +108,7 @@ export default function Pricing() {
       gradient: 'from-indigo-500 to-purple-500',
       popular: false,
       // Beta Launch Pricing (first 10 signups, locked for life)
-      foundingMemberPrice: 200,
+      foundingMemberPrice: 500,
       savings: 'Locked for life'
     }
   ]
