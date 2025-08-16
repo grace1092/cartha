@@ -46,7 +46,7 @@ export default function Pricing() {
       name: 'Solo Practitioner',
       icon: Users,
       price: 50,
-      originalPrice: 125,
+      originalPrice: 75,
       description: 'Perfect for individual therapists, psychologists, and counselors',
       subtitle: 'Everything you need to manage your practice',
       features: [
@@ -69,7 +69,7 @@ export default function Pricing() {
       name: 'Small Group Practice',
       icon: Building,
       price: 150,
-      originalPrice: 375,
+      originalPrice: 200,
       description: 'For small teams and group practices',
       subtitle: '2-10 practitioners',
       features: [
@@ -92,7 +92,7 @@ export default function Pricing() {
       name: 'Large Organization',
       icon: Shield,
       price: 500,
-      originalPrice: 1250,
+      originalPrice: 600,
       description: 'For clinics, hospitals, and large practices',
       subtitle: '10+ practitioners',
       features: [
