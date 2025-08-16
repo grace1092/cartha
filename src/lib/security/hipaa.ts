@@ -295,7 +295,7 @@ export interface Role {
 }
 
 export class HIPAAAccessControl {
-  private static roles: Map<string, Role> = new Map([
+  static roles: Map<string, Role> = new Map([
     ['therapist', {
       id: 'therapist',
       name: 'Licensed Therapist',
@@ -551,7 +551,7 @@ export class HIPAAComplianceChecker {
 
   private static areAccessControlsConfigured(): boolean {
     // In production, this would check access control configuration
-    return this.roles.size > 0;
+    return HIPAAAccessControl.roles.size > 0;
   }
 
   private static areAuditControlsEnabled(): boolean {
