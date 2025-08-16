@@ -48,20 +48,19 @@ export default function Hero() {
       
       <div className="container-luxury relative z-10">
         <div className="max-w-6xl mx-auto text-center">
-          {/* Main Headline */}
+                    {/* Main Headline */}
           <h1 className="heading-hero mb-8 opacity-0 animate-fade-in">
             <span className="block mb-6">
-              Lightweight Client Management
+              Modern practice management for therapists,
             </span>
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600">
-              That Actually Works
+              not busywork.
             </span>
           </h1>
-          
+
           {/* Subheadline */}
           <p className="subheading mb-16 max-w-4xl mx-auto opacity-0 animate-fade-in-delay">
-            For therapists, psychologists, and counselors who work one-on-one or in small groups. 
-            Cartha handles your notes, billing, and client communication so you can focus on what matters: your clients.
+            AI session notes, follow-ups, and client dashboards in one secure place.
           </p>
           
           {/* Call-to-Action Buttons */}
@@ -86,37 +85,37 @@ export default function Hero() {
               </>
             ) : (
               <>
-                <button 
-                  onClick={handleGetDemo}
-                  className="group btn-luxury flex items-center gap-3"
-                >
-                  Get Private Demo
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </button>
-                <button 
-                  onClick={handleSeeFeatures}
-                  className="group btn-secondary flex items-center gap-3"
-                >
-                  See Features
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </button>
+                                 <button
+                   onClick={handleGetDemo}
+                   className="group btn-luxury flex items-center gap-3"
+                 >
+                   Start Free Trial
+                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                 </button>
+                 <button
+                   onClick={handleSeeFeatures}
+                   className="group btn-secondary flex items-center gap-3"
+                 >
+                   Watch 60-sec Demo
+                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                 </button>
               </>
             )}
           </div>
 
           {/* Security Badges */}
           <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 opacity-0 animate-fade-in-delay-4">
-            <div className="flex items-center gap-2 card-primary px-4 py-3 rounded-lg backdrop-blur-sm">
-              <Shield className="w-5 h-5 text-green-600" />
-              <span className="text-sm font-semibold text-body">HIPAA Compliant</span>
+            <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+              <Shield className="w-4 h-4 text-gray-600" />
+              <span className="text-sm text-gray-700">HIPAA-ready architecture</span>
             </div>
-            <div className="flex items-center gap-2 card-primary px-4 py-3 rounded-lg backdrop-blur-sm">
-              <CheckCircle className="w-5 h-5 text-blue-600" />
-              <span className="text-sm font-semibold text-body">SOC 2 Type II</span>
+            <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+              <CheckCircle className="w-4 h-4 text-gray-600" />
+              <span className="text-sm text-gray-700">SOC 2 audit in progress</span>
             </div>
-            <div className="flex items-center gap-2 card-primary px-4 py-3 rounded-lg backdrop-blur-sm">
-              <Lock className="w-5 h-5 text-purple-600" />
-              <span className="text-sm font-semibold text-body">256-bit SSL</span>
+            <div className="flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+              <Lock className="w-4 h-4 text-gray-600" />
+              <span className="text-sm text-gray-700">Security-first design</span>
             </div>
           </div>
         </div>

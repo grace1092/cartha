@@ -6,27 +6,27 @@ import { Star, Quote } from 'lucide-react';
 const Testimonials = () => {
   const testimonials = [
     {
-      name: "Dr. Sarah Chen",
-      title: "Licensed Clinical Psychologist",
-      practice: "Mindful Therapy Center",
-      content: "Cartha has revolutionized my practice. What used to take me 30 minutes of documentation now takes less than 3 minutes. The AI-generated notes are incredibly accurate and capture nuances I sometimes miss during sessions.",
+      name: "LMFT in CA",
+      title: "Marriage & Family Therapist",
+      practice: "Private Practice",
+      content: "The AI note-taking feature helps streamline my documentation process. The interface feels secure and designed specifically for mental health professionals.",
       rating: 5,
-      image: "/api/placeholder/64/64" // Placeholder for professional headshot
+      image: null // Anonymized for privacy
     },
     {
-      name: "Marcus Rodriguez, LMFT",
-      title: "Marriage & Family Therapist",
-      practice: "Couples Connect Therapy",
-      content: "The quality of session notes is outstanding. Cartha doesn't just transcribe—it understands therapeutic concepts and formats everything perfectly for insurance and clinical review. It's like having a skilled assistant.",
+      name: "Licensed Psychologist",
+      title: "Clinical Psychologist", 
+      practice: "Group Practice",
+      content: "The scheduling and client management tools work well for our small practice. The system feels thoughtfully designed for therapists rather than generic healthcare.",
       rating: 5,
-      image: "/api/placeholder/64/64"
+      image: null // Anonymized for privacy
     }
   ];
 
   const stats = [
-    { value: "92%", label: "Time saved on documentation" },
-    { value: "99%", label: "Accuracy in session notes" },
-    { value: "4.9/5", label: "Average therapist rating" }
+    { value: "Early access", label: "Beta testing program" },
+    { value: "HIPAA-ready", label: "Security architecture" },
+    { value: "In development", label: "SOC 2 compliance" }
   ];
 
   return (
@@ -35,11 +35,10 @@ const Testimonials = () => {
         {/* Section Header */}
         <div className="text-center mb-16 lg:mb-20">
           <h2 className="heading-xl mb-6">
-            Trusted by professionals who care about quality
+            Early user feedback
           </h2>
           <p className="subheading max-w-2xl mx-auto">
-            Join hundreds of therapists, psychologists, and counselors who've transformed 
-            their practice with AI-powered documentation.
+            Insights from mental health professionals testing our beta platform.
           </p>
         </div>
 

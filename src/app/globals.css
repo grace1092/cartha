@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* Luxury Typography */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap');
 
 :root {
   /* ===== LIGHT MODE COLOR SYSTEM ===== */
@@ -47,10 +47,10 @@
   /* ===== LIGHT MODE THEME VARIABLES ===== */
   
   /* Background Colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --bg-accent: #eff6ff;
+  --bg-primary: #FAFAF7;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f8fafc;
+  --bg-accent: #f1f5f9;
   --bg-muted: #f8fafc;
   --bg-overlay: rgba(255, 255, 255, 0.8);
   --bg-glass: rgba(255, 255, 255, 0.25);
@@ -68,20 +68,20 @@
   --bg-footer: #ffffff; /* revert to white for light mode */
   
   /* Text Colors */
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-tertiary: #64748b;
-  --text-muted: #94a3b8;
+  --text-primary: #222222;
+  --text-secondary: #6B7280;
+  --text-tertiary: #9CA3AF;
+  --text-muted: #D1D5DB;
   --text-inverse: #ffffff;
-  --text-link: #2563eb;
-  --text-link-hover: #1d4ed8;
+  --text-link: #222222;
+  --text-link-hover: #6B7280;
   --text-button-primary: #ffffff;
-  --text-button-secondary: #0f172a;
-  --text-button-ghost: #475569;
-  --text-heading: #0f172a;
-  --text-body: #475569;
-  --text-caption: #64748b;
-  --text-footer: #1e293b; /* revert to dark text for light mode */
+  --text-button-secondary: #222222;
+  --text-button-ghost: #6B7280;
+  --text-heading: #222222;
+  --text-body: #6B7280;
+  --text-caption: #9CA3AF;
+  --text-footer: #222222; /* revert to dark text for light mode */
   
   /* Border Colors */
   --border-primary: #e2e8f0;
@@ -115,9 +115,9 @@
   --gradient-features: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
   
   /* Typography */
-  --font-heading: "Playfair Display", serif;
-  --font-body: "Source Sans Pro", sans-serif;
-  --font-body-alt: "Inter", sans-serif;
+--font-heading: "Cormorant Garamond", serif;
+--font-body: "Inter", sans-serif;
+--font-body-alt: "Inter", sans-serif;
   
   /* Animations */
   --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -421,19 +421,21 @@ html {
   
   .btn-luxury {
     @apply btn px-12 py-5 rounded-2xl;
-    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-    color: var(--text-primary);
-    border: 1.5px solid var(--border-primary);
-    box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.08);
+    background: #222222;
+    color: #ffffff;
+    border: 1.5px solid #222222;
+    box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.15);
     font-size: 1.125rem;
     font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .btn-luxury:hover {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-    border-color: var(--border-accent);
-    transform: translateY(-3px);
-    box-shadow: 0 15px 40px -8px rgba(0, 0, 0, 0.12);
+    background: #ffffff;
+    color: #222222;
+    border-color: #222222;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px -8px rgba(0, 0, 0, 0.2);
   }
   
   /* ===== CARD SYSTEM ===== */

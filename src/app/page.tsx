@@ -10,7 +10,7 @@ import Stats from '@/components/sections/Stats'
 import Testimonials from '@/components/sections/Testimonials'
 import About from '@/components/sections/About'
 import Contact from '@/components/sections/Contact'
-import Pricing from '@/components/sections/Pricing'
+import PricingSimple from '@/components/sections/PricingSimple'
 import FinalCTA from '@/components/sections/FinalCTA'
 import Link from 'next/link';
 
@@ -25,7 +25,7 @@ export default function Home() {
         <LiveDemo />
         <Features />
         <Testimonials />
-        <Pricing />
+                      <PricingSimple />
         <Stats />
         <About />
         <Contact />
