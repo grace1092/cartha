@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useAuth } from '@/lib/context/AuthContext';
-import UserDashboard from '@/components/auth/UserDashboard';
+import ComprehensiveDashboard from '@/components/dashboard/ComprehensiveDashboard';
 import { useRouter } from 'next/navigation';
 
 export default function DashboardPage() {
@@ -11,15 +11,24 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!isLoading && !user) {
-      router.push('/');
+      router.push('/auth/signin');
     }
   }, [user, isLoading, router]);
 
-  // Remove loading state to show content immediately
-
-  if (!user) {
-    return null; // Will redirect to home page
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
   }
 
-  return <UserDashboard />;
+  if (!user) {
+    return null; // Will redirect to signin page
+  }
+
+  return <ComprehensiveDashboard currentView="dashboard" />;
 } 

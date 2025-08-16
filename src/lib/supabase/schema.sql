@@ -650,20 +650,123 @@ create table public.support_tickets (
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
--- Create coaching_sessions table
-create table public.coaching_sessions (
+-- Create therapy clients table
+create table public.therapy_clients (
   id uuid default gen_random_uuid() primary key,
-  user_id uuid references public.profiles(id) on delete cascade not null,
-  partner_id uuid references public.profiles(id) on delete cascade,
-  session_type text check (session_type in ('video_call', 'group_session', 'one_on_one')) not null,
-  status text check (status in ('scheduled', 'completed', 'canceled', 'no_show')) default 'scheduled',
-  scheduled_at timestamp with time zone not null,
-  duration_minutes integer default 30,
-  coach_name text,
-  session_notes text,
-  recording_url text,
+  therapist_id uuid references public.profiles(id) on delete cascade not null,
+  first_name text not null,
+  last_name text not null,
+  email text,
+  phone text,
+  date_of_birth date,
+  emergency_contact_name text,
+  emergency_contact_phone text,
+  insurance_provider text,
+  insurance_id text,
+  presenting_concerns text,
+  treatment_goals text[],
+  status text check (status in ('active', 'inactive', 'discharged', 'on_hold')) default 'active',
+  intake_date date not null default current_date,
+  last_session_date timestamp with time zone,
+  next_appointment timestamp with time zone,
+  session_rate numeric(10,2),
+  notes text,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Create therapy sessions table
+create table public.therapy_sessions (
+  id uuid default gen_random_uuid() primary key,
+  therapist_id uuid references public.profiles(id) on delete cascade not null,
+  client_id uuid references public.therapy_clients(id) on delete cascade not null,
+  session_date timestamp with time zone not null,
+  duration_minutes integer default 50,
+  session_type text check (session_type in ('individual', 'family', 'group', 'couples', 'intake', 'assessment')) default 'individual',
+  status text check (status in ('scheduled', 'completed', 'no_show', 'canceled', 'late_cancel')) default 'scheduled',
+  location text default 'office',
+  session_notes text,
+  progress_notes text,
+  interventions_used text[],
+  homework_assigned text,
+  next_session_goals text,
+  risk_assessment text,
+  session_rating integer check (session_rating >= 1 and session_rating <= 10),
+  client_mood_before text,
+  client_mood_after text,
+  billing_code text,
+  billing_amount numeric(10,2),
+  billing_status text check (billing_status in ('pending', 'billed', 'paid', 'insurance_pending')) default 'pending',
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Create appointments table
+create table public.appointments (
+  id uuid default gen_random_uuid() primary key,
+  therapist_id uuid references public.profiles(id) on delete cascade not null,
+  client_id uuid references public.therapy_clients(id) on delete cascade not null,
+  appointment_date timestamp with time zone not null,
+  duration_minutes integer default 50,
+  appointment_type text check (appointment_type in ('therapy', 'intake', 'assessment', 'consultation')) default 'therapy',
+  status text check (status in ('scheduled', 'confirmed', 'completed', 'no_show', 'canceled', 'rescheduled')) default 'scheduled',
+  location text default 'office',
+  notes text,
+  reminder_sent boolean default false,
+  confirmation_sent boolean default false,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Create billing_records table
+create table public.billing_records (
+  id uuid default gen_random_uuid() primary key,
+  therapist_id uuid references public.profiles(id) on delete cascade not null,
+  client_id uuid references public.therapy_clients(id) on delete cascade not null,
+  session_id uuid references public.therapy_sessions(id) on delete cascade,
+  invoice_number text unique not null,
+  service_date date not null,
+  billing_code text not null,
+  description text not null,
+  amount numeric(10,2) not null,
+  insurance_amount numeric(10,2) default 0,
+  client_amount numeric(10,2) not null,
+  status text check (status in ('draft', 'sent', 'paid', 'overdue', 'cancelled')) default 'draft',
+  due_date date,
+  paid_date date,
+  payment_method text,
+  notes text,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Create treatment_plans table
+create table public.treatment_plans (
+  id uuid default gen_random_uuid() primary key,
+  therapist_id uuid references public.profiles(id) on delete cascade not null,
+  client_id uuid references public.therapy_clients(id) on delete cascade not null,
+  diagnosis_primary text,
+  diagnosis_secondary text[],
+  treatment_goals jsonb not null, -- [{"goal": "text", "target_date": "date", "status": "active|completed|discontinued"}]
+  interventions text[],
+  session_frequency text, -- "weekly", "biweekly", "monthly"
+  estimated_duration text, -- "short-term (1-3 months)", "medium-term (3-6 months)", "long-term (6+ months)"
+  review_date date,
+  status text check (status in ('active', 'completed', 'discontinued', 'on_hold')) default 'active',
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Create practice_analytics table for tracking metrics
+create table public.practice_analytics (
+  id uuid default gen_random_uuid() primary key,
+  therapist_id uuid references public.profiles(id) on delete cascade not null,
+  metric_name text not null,
+  metric_value numeric not null,
+  metric_date date not null default current_date,
+  metadata jsonb default '{}'::jsonb,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  unique(therapist_id, metric_name, metric_date)
 );
 
 -- Insert default subscription tiers
