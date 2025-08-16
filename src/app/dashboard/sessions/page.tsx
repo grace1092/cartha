@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { createClientSupabaseClient } from '@/lib/supabase/browserClient'
 import { TherapySession, Client } from '@/lib/types/database'
 import { formatDate, formatTime } from '@/lib/utils'
+import SessionNotes from '@/components/dashboard/SessionNotes'
 
 interface SessionWithClient extends TherapySession {
   clients: Client
@@ -15,6 +16,7 @@ export default function SessionsPage() {
   const [filteredSessions, setFilteredSessions] = useState<SessionWithClient[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'all' | 'draft' | 'completed'>('all')
+  const [view, setView] = useState<'list' | 'create'>('list')
 
   const supabase = createClientSupabaseClient()
 
@@ -68,7 +70,14 @@ export default function SessionsPage() {
     setFilteredSessions(filtered)
   }
 
-  // Remove loading state to show content immediately
+  // Show SessionNotes component for creating new sessions
+  if (view === 'create') {
+    return (
+      <div className="px-4 lg:px-8">
+        <SessionNotes onBack={() => setView('list')} />
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 lg:px-8">
@@ -80,15 +89,15 @@ export default function SessionsPage() {
             View and manage your therapy sessions
           </p>
         </div>
-        <Link
-          href="/dashboard/sessions/new"
+        <button
+          onClick={() => setView('create')}
           className="btn-primary mt-4 sm:mt-0"
         >
           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
           </svg>
           New Session
-        </Link>
+        </button>
       </div>
 
       {/* Filters */}
@@ -225,9 +234,9 @@ export default function SessionsPage() {
             }
           </p>
           {filter === 'all' && (
-            <Link href="/dashboard/sessions/new" className="btn-primary">
+            <button onClick={() => setView('create')} className="btn-primary">
               Create Your First Session
-            </Link>
+            </button>
           )}
         </div>
       )}
