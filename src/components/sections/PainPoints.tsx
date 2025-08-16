@@ -63,13 +63,21 @@ export default function PainPoints() {
         >
           {painPoints.map((point, index) => (
             <motion.div key={index} variants={item}>
-              <Card
-                title={point.title}
-                description={point.description}
-                icon={point.icon}
-                variant="outline"
-                className="h-full"
-              />
+              <Card className="h-full">
+                <div className="p-6">
+                  <div className="flex items-center mb-4">
+                    <div className="mr-3">
+                      {point.icon}
+                    </div>
+                    <h3 className="font-[family-name:var(--font-playfair)] text-xl font-semibold text-[#222]">
+                      {point.title}
+                    </h3>
+                  </div>
+                  <p className="text-neutral-600">
+                    {point.description}
+                  </p>
+                </div>
+              </Card>
             </motion.div>
           ))}
         </motion.div>

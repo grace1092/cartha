@@ -63,13 +63,21 @@ export default function Outcomes() {
         >
           {outcomes.map((outcome, index) => (
             <motion.div key={index} variants={item}>
-              <Card
-                title={outcome.title}
-                description={outcome.description}
-                icon={outcome.icon}
-                variant="gradient"
-                className="h-full"
-              />
+              <Card className="h-full">
+                <div className="p-6">
+                  <div className="flex items-center mb-4">
+                    <div className="mr-3">
+                      {outcome.icon}
+                    </div>
+                    <h3 className="font-[family-name:var(--font-playfair)] text-xl font-semibold text-[#222]">
+                      {outcome.title}
+                    </h3>
+                  </div>
+                  <p className="text-neutral-600">
+                    {outcome.description}
+                  </p>
+                </div>
+              </Card>
             </motion.div>
           ))}
         </motion.div>

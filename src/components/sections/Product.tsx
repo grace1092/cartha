@@ -132,13 +132,21 @@ export default function Product() {
         >
           {features.map((feature, index) => (
             <motion.div key={index} variants={item}>
-              <Card
-                title={feature.title}
-                description={feature.description}
-                icon={feature.icon}
-                variant="default"
-                className="h-full hover:shadow-xl transition-shadow duration-300"
-              />
+              <Card className="h-full hover:shadow-xl transition-shadow duration-300">
+                <div className="p-6">
+                  <div className="flex items-center mb-4">
+                    <div className="mr-3">
+                      {feature.icon}
+                    </div>
+                    <h3 className="font-[family-name:var(--font-playfair)] text-xl font-semibold text-[#222]">
+                      {feature.title}
+                    </h3>
+                  </div>
+                  <p className="text-neutral-600">
+                    {feature.description}
+                  </p>
+                </div>
+              </Card>
             </motion.div>
           ))}
         </motion.div>
