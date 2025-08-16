@@ -255,7 +255,10 @@ export default function Features() {
                 Ready to transform your practice? Start your free trial today.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button className="btn-primary px-8 py-4 text-lg font-semibold">
+                <button 
+                  onClick={() => window.location.href = '/dashboard'}
+                  className="btn-primary px-8 py-4 text-lg font-semibold"
+                >
                   Start Free Trial
                 </button>
                 <button className="btn-secondary px-8 py-4 text-lg font-semibold">

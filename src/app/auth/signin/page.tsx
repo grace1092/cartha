@@ -39,9 +39,9 @@ export default function SignInPage() {
     // For demo purposes, simulate a login
     setLoading(true);
     setTimeout(() => {
-      // Since we don't have real auth setup, just redirect to dashboard
-      router.push('/dashboard');
-    }, 1000);
+      // Direct navigation to dashboard for demo
+      window.location.href = '/dashboard';
+    }, 500);
   };
 
   return (
