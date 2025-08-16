@@ -168,18 +168,18 @@ export default function Features() {
 
   return (
     <>
-      <section id="features" className="py-24 lg:py-32 relative section-features">
-        <div className="container-modern relative z-10">
+      <section id="features" className="section-spacing relative section-features">
+        <div className="container-luxury relative z-10">
           {/* Section Header */}
           <div className="text-center mb-20">
             <div className="scroll-reveal">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-heading mb-6">
+              <h2 className="heading-xl mb-6">
                 Everything you need to run your
                 <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> therapy practice</span>
               </h2>
             </div>
             <div className="scroll-reveal" style={{ animationDelay: '0.2s' }}>
-              <p className="text-xl text-body max-w-3xl mx-auto leading-relaxed">
+              <p className="subheading max-w-3xl mx-auto">
                 Streamline your workflow with powerful tools designed specifically for mental health professionals. 
                 Focus on what matters most – your clients.
               </p>

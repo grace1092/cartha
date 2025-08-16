@@ -128,8 +128,8 @@ export default function Pricing() {
   }
 
   return (
-    <section id="pricing" className="py-20 lg:py-32 section-pricing relative">
-      <div className="container-modern relative z-10">
+    <section id="pricing" className="section-spacing section-pricing relative">
+      <div className="container-luxury relative z-10">
         {/* Founding Member Countdown */}
         <div className="bg-gradient-to-r from-primary-700 to-purple-700 text-white rounded-2xl p-6 mb-16 shadow-xl">
           <div className="text-center">

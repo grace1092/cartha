@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Modern Typography */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+/* Luxury Typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&family=Source+Sans+Pro:wght@300;400;500;600;700&display=swap');
 
 :root {
   /* ===== LIGHT MODE COLOR SYSTEM ===== */
@@ -115,8 +115,9 @@
   --gradient-features: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
   
   /* Typography */
-  --font-heading: "Plus Jakarta Sans", sans-serif;
-  --font-body: "Inter", sans-serif;
+  --font-heading: "Playfair Display", serif;
+  --font-body: "Source Sans Pro", sans-serif;
+  --font-body-alt: "Inter", sans-serif;
   
   /* Animations */
   --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -258,54 +259,76 @@ html {
     line-height: 1.6;
   }
   
-  /* ===== TYPOGRAPHY SYSTEM ===== */
+  /* ===== LUXURY TYPOGRAPHY SYSTEM ===== */
   .heading-hero {
     font-family: var(--font-heading);
-    @apply text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-tight;
+    @apply text-5xl md:text-6xl lg:text-7xl font-medium leading-[1.1] tracking-tight;
     color: var(--text-heading);
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    letter-spacing: -0.02em;
+    font-weight: 500;
   }
   
   .heading-xl {
     font-family: var(--font-heading);
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight;
+    @apply text-4xl md:text-5xl lg:text-6xl font-medium leading-tight tracking-tight;
     color: var(--text-heading);
+    letter-spacing: -0.01em;
+    font-weight: 500;
   }
   
   .heading-lg {
     font-family: var(--font-heading);
-    @apply text-3xl md:text-4xl font-bold leading-tight tracking-tight;
+    @apply text-3xl md:text-4xl font-medium leading-tight;
     color: var(--text-heading);
+    letter-spacing: -0.01em;
+    font-weight: 500;
   }
   
   .heading-md {
     font-family: var(--font-heading);
-    @apply text-2xl md:text-3xl font-semibold leading-tight tracking-tight;
+    @apply text-2xl md:text-3xl font-medium leading-tight;
     color: var(--text-heading);
+    letter-spacing: -0.005em;
+    font-weight: 500;
   }
   
   .heading-sm {
     font-family: var(--font-heading);
-    @apply text-xl md:text-2xl font-semibold leading-tight;
+    @apply text-xl md:text-2xl font-medium leading-tight;
     color: var(--text-heading);
+    font-weight: 500;
   }
   
   .body-lg {
+    font-family: var(--font-body);
     @apply text-lg md:text-xl leading-relaxed;
     color: var(--text-body);
+    font-weight: 400;
+    line-height: 1.7;
   }
   
   .body-md {
+    font-family: var(--font-body);
     @apply text-base md:text-lg leading-relaxed;
     color: var(--text-body);
+    font-weight: 400;
+    line-height: 1.7;
   }
   
   .body-sm {
+    font-family: var(--font-body);
     @apply text-sm md:text-base leading-relaxed;
     color: var(--text-caption);
+    font-weight: 400;
+    line-height: 1.6;
+  }
+  
+  .subheading {
+    font-family: var(--font-body);
+    @apply text-lg md:text-xl leading-relaxed;
+    color: var(--text-secondary);
+    font-weight: 400;
+    line-height: 1.6;
   }
 
   /* ===== FORM ELEMENTS ===== */
@@ -346,47 +369,71 @@ html {
 }
 
 @layer components {
-  /* ===== BUTTON SYSTEM ===== */
+  /* ===== LUXURY BUTTON SYSTEM ===== */
   .btn {
     @apply inline-flex items-center justify-center font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
-    font-family: var(--font-heading);
+    font-family: var(--font-body);
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.025em;
   }
   
   .btn-primary {
-    @apply btn px-8 py-4 rounded-2xl;
-    background: var(--bg-button-primary);
-    color: var(--text-button-primary);
-    box-shadow: var(--shadow-lg);
+    @apply btn px-10 py-4 rounded-2xl;
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    color: white;
+    box-shadow: 0 8px 25px -8px rgba(37, 99, 235, 0.5);
+    border: 1px solid transparent;
   }
   
   .btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-xl);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px -8px rgba(37, 99, 235, 0.6);
+    background: linear-gradient(135deg, #1d4ed8 0%, #6b21a8 100%);
   }
   
   .btn-secondary {
-    @apply btn px-8 py-4 rounded-2xl border;
-    background-color: var(--bg-button-secondary);
-    color: var(--text-button-secondary);
-    border-color: var(--border-primary);
-    box-shadow: var(--shadow-md);
+    @apply btn px-10 py-4 rounded-2xl;
+    background-color: white;
+    color: var(--text-primary);
+    border: 1.5px solid var(--border-primary);
+    box-shadow: 0 4px 15px -4px rgba(0, 0, 0, 0.1);
   }
   
   .btn-secondary:hover {
-    background-color: var(--bg-card-hover);
-    border-color: var(--border-secondary);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-lg);
+    background-color: var(--bg-secondary);
+    border-color: var(--border-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.15);
   }
   
   .btn-ghost {
-    @apply btn px-6 py-3 rounded-xl;
-    color: var(--text-button-ghost);
+    @apply btn px-8 py-3 rounded-xl;
+    color: var(--text-secondary);
+    background: transparent;
   }
   
   .btn-ghost:hover {
     color: var(--text-primary);
     background-color: var(--bg-secondary);
+    transform: translateY(-1px);
+  }
+  
+  .btn-luxury {
+    @apply btn px-12 py-5 rounded-2xl;
+    background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    color: var(--text-primary);
+    border: 1.5px solid var(--border-primary);
+    box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.08);
+    font-size: 1.125rem;
+    font-weight: 500;
+  }
+  
+  .btn-luxury:hover {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-color: var(--border-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px -8px rgba(0, 0, 0, 0.12);
   }
   
   /* ===== CARD SYSTEM ===== */
@@ -542,9 +589,29 @@ html {
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   }
 
-  /* ===== CONTAINER ===== */
-  .container-modern {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  /* ===== LUXURY SPACING & CONTAINERS ===== */
+  .container-luxury {
+    @apply max-w-7xl mx-auto px-6 sm:px-8 lg:px-12;
+  }
+  
+  .container-narrow {
+    @apply max-w-4xl mx-auto px-6 sm:px-8 lg:px-12;
+  }
+  
+  .container-wide {
+    @apply max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12;
+  }
+  
+  .section-spacing {
+    @apply py-20 lg:py-32;
+  }
+  
+  .section-spacing-sm {
+    @apply py-16 lg:py-24;
+  }
+  
+  .section-spacing-lg {
+    @apply py-24 lg:py-40;
   }
 
   /* ===== ANIMATIONS ===== */

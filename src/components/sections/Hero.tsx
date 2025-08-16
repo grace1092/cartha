@@ -46,61 +46,59 @@ export default function Hero() {
         }} />
       </div>
       
-      <div className="container-modern relative z-10 px-4 sm:px-6 lg:px-8">
+      <div className="container-luxury relative z-10">
         <div className="max-w-6xl mx-auto text-center">
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-8 opacity-0 animate-fade-in">
-            <span className="block mb-4 text-heading">
+          <h1 className="heading-hero mb-8 opacity-0 animate-fade-in">
+            <span className="block mb-6">
               Lightweight Client Management
             </span>
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600">
               That Actually Works
             </span>
-            <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-body mt-4">
-              for Client-Focused Professionals
-            </span>
           </h1>
           
           {/* Subheadline */}
-          <p className="text-lg sm:text-xl md:text-2xl text-body mb-12 max-w-4xl mx-auto leading-relaxed opacity-0 animate-fade-in-delay">
-            For therapists, psychologists, and counselors who work one-on-one or in small groups. Cartha handles your notes, billing, and client communication so you can focus on what matters: your clients.
+          <p className="subheading mb-16 max-w-4xl mx-auto opacity-0 animate-fade-in-delay">
+            For therapists, psychologists, and counselors who work one-on-one or in small groups. 
+            Cartha handles your notes, billing, and client communication so you can focus on what matters: your clients.
           </p>
           
           {/* Call-to-Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-16 opacity-0 animate-fade-in-delay-2">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-20 opacity-0 animate-fade-in-delay-2">
             {user ? (
               <>
                 <Link 
                   href="/dashboard" 
                   onClick={handleDashboardClick}
-                  className="group btn-primary px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl font-semibold flex items-center gap-3"
+                  className="group btn-luxury flex items-center gap-3"
                 >
                   Go to Dashboard
-                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <button 
                   onClick={handleSeeFeatures}
-                  className="group btn-secondary px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl font-semibold flex items-center gap-3"
+                  className="group btn-secondary flex items-center gap-3"
                 >
                   See Features
-                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
               </>
             ) : (
               <>
                 <button 
                   onClick={handleGetDemo}
-                  className="group btn-primary px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl font-semibold flex items-center gap-3"
+                  className="group btn-luxury flex items-center gap-3"
                 >
                   Get Private Demo
-                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button 
                   onClick={handleSeeFeatures}
-                  className="group btn-secondary px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl font-semibold flex items-center gap-3"
+                  className="group btn-secondary flex items-center gap-3"
                 >
                   See Features
-                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
               </>
             )}

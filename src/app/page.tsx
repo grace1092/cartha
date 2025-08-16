@@ -4,6 +4,7 @@ import { useAuth } from '@/lib/context/AuthContext';
 import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
 import Hero from '@/components/sections/Hero'
+import LiveDemo from '@/components/sections/LiveDemo'
 import Features from '@/components/sections/Features'
 import Stats from '@/components/sections/Stats'
 import Testimonials from '@/components/sections/Testimonials'
@@ -21,12 +22,13 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
+        <LiveDemo />
         <Features />
-        <Stats />
         <Testimonials />
+        <Pricing />
+        <Stats />
         <About />
         <Contact />
-        <Pricing />
         <FinalCTA />
         
         {/* Dashboard Access for Logged In Users */}

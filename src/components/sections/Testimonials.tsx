@@ -1,93 +1,99 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { Star, Quote } from 'lucide-react'
-import { revealOnScroll } from '@/lib/utils'
+import React from 'react';
+import { Star, Quote } from 'lucide-react';
 
-export default function Testimonials() {
-  useEffect(() => {
-    revealOnScroll()
-  }, [])
-
+const Testimonials = () => {
   const testimonials = [
     {
-      name: 'Dr. Sarah Johnson',
-      role: 'Licensed Clinical Psychologist',
-      practice: 'Mindful Therapy Group',
-      content: 'Cartha has completely transformed how I manage my practice. The AI session notes save me hours every week, and my clients love the automated follow-ups. It\'s like having a virtual assistant that actually understands therapy.',
+      name: "Dr. Sarah Chen",
+      title: "Licensed Clinical Psychologist",
+      practice: "Mindful Therapy Center",
+      content: "Cartha has revolutionized my practice. What used to take me 30 minutes of documentation now takes less than 3 minutes. The AI-generated notes are incredibly accurate and capture nuances I sometimes miss during sessions.",
       rating: 5,
-      avatar: 'SJ'
+      image: "/api/placeholder/64/64" // Placeholder for professional headshot
     },
     {
-      name: 'Michael Chen',
-      role: 'Marriage & Family Therapist',
-      practice: 'Chen Family Counseling',
-      content: 'The client dashboard is incredible. I can track progress, manage appointments, and generate reports all in one place. My practice efficiency has improved by 40% since switching to Cartha.',
+      name: "Marcus Rodriguez, LMFT",
+      title: "Marriage & Family Therapist",
+      practice: "Couples Connect Therapy",
+      content: "The quality of session notes is outstanding. Cartha doesn't just transcribe—it understands therapeutic concepts and formats everything perfectly for insurance and clinical review. It's like having a skilled assistant.",
       rating: 5,
-      avatar: 'MC'
-    },
-    {
-      name: 'Dr. Emily Rodriguez',
-      role: 'Clinical Social Worker',
-      practice: 'Healing Hearts Therapy',
-      content: 'As a solo practitioner, I was drowning in administrative tasks. Cartha automated everything from scheduling to note-taking. Now I can focus on what I do best - helping my clients heal.',
-      rating: 5,
-      avatar: 'ER'
+      image: "/api/placeholder/64/64"
     }
-  ]
+  ];
+
+  const stats = [
+    { value: "92%", label: "Time saved on documentation" },
+    { value: "99%", label: "Accuracy in session notes" },
+    { value: "4.9/5", label: "Average therapist rating" }
+  ];
 
   return (
-    <section className="py-20 lg:py-28 section-testimonials">
-      <div className="container-modern">
+    <section className="section-spacing section-secondary">
+      <div className="container-luxury">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="scroll-reveal">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-heading mb-6">
-              What therapists are saying
-            </h2>
-          </div>
-          <div className="scroll-reveal" style={{ animationDelay: '0.2s' }}>
-            <p className="text-xl text-body max-w-2xl mx-auto">
-              Join hundreds of satisfied therapists who have transformed their practice with Cartha
-            </p>
-          </div>
+        <div className="text-center mb-16 lg:mb-20">
+          <h2 className="heading-xl mb-6">
+            Trusted by professionals who care about quality
+          </h2>
+          <p className="subheading max-w-2xl mx-auto">
+            Join hundreds of therapists, psychologists, and counselors who've transformed 
+            their practice with AI-powered documentation.
+          </p>
+        </div>
+
+        {/* Stats Row */}
+        <div className="grid md:grid-cols-3 gap-8 mb-16 lg:mb-20">
+          {stats.map((stat, index) => (
+            <div key={index} className="text-center">
+              <div className="heading-xl text-blue-600 mb-2">{stat.value}</div>
+              <p className="body-md text-slate-600">{stat.label}</p>
+            </div>
+          ))}
         </div>
 
         {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {testimonials.map((testimonial, index) => (
-            <div
-              key={testimonial.name}
-              className="scroll-reveal group"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="bg-card rounded-2xl p-8 shadow-lg border border-card-border hover:shadow-xl hover:scale-[1.02] transition-all duration-300 h-full">
+            <div key={index} className="group">
+              <div className="bg-white rounded-3xl p-8 lg:p-10 shadow-sm border border-slate-100 hover:shadow-lg hover:border-slate-200 transition-all duration-300">
                 {/* Quote Icon */}
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                  <Quote className="w-6 h-6 text-white" />
+                <div className="mb-6">
+                  <Quote className="w-8 h-8 text-blue-200" />
                 </div>
 
+                {/* Testimonial Content */}
+                <blockquote className="body-lg text-slate-700 mb-8 leading-relaxed">
+                  "{testimonial.content}"
+                </blockquote>
+
                 {/* Rating */}
-                <div className="flex items-center mb-6">
+                <div className="flex items-center gap-1 mb-6">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                   ))}
                 </div>
 
-                {/* Content */}
-                <blockquote className="text-body mb-8 leading-relaxed italic">
-                  "{testimonial.content}"
-                </blockquote>
-
-                {/* Author */}
-                <div className="flex items-center">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center text-white font-semibold text-lg mr-4">
-                    {testimonial.avatar}
+                {/* Author Info */}
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl flex items-center justify-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-200 to-purple-200 rounded-xl flex items-center justify-center">
+                      <span className="text-blue-700 font-semibold text-lg">
+                        {testimonial.name.split(' ').map(n => n[0]).join('')}
+                      </span>
+                    </div>
                   </div>
                   <div>
-                    <div className="font-semibold text-heading">{testimonial.name}</div>
-                    <div className="text-sm text-muted">{testimonial.role}</div>
-                    <div className="text-sm text-primary-600">{testimonial.practice}</div>
+                    <div className="font-semibold text-slate-900 mb-1">
+                      {testimonial.name}
+                    </div>
+                    <div className="body-sm text-slate-600 mb-1">
+                      {testimonial.title}
+                    </div>
+                    <div className="body-sm text-slate-500">
+                      {testimonial.practice}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -95,28 +101,36 @@ export default function Testimonials() {
           ))}
         </div>
 
-        {/* Bottom CTA */}
-        <div className="text-center mt-16">
-          <div className="scroll-reveal" style={{ animationDelay: '0.4s' }}>
-            <div className="bg-gradient-to-r from-primary-600 to-purple-600 rounded-2xl p-12 max-w-4xl mx-auto text-white shadow-2xl">
-              <h3 className="text-2xl md:text-3xl font-bold mb-6">
-                Ready to join them?
-              </h3>
-              <p className="text-lg mb-8 text-primary-100 leading-relaxed">
-                Start your free trial today and see why hundreds of therapists choose Cartha
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-white text-primary-600 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-lg">
-                  Start Free Trial
-                </button>
-                <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-white hover:text-primary-600 transition-all duration-300 transform hover:scale-105">
-                  Schedule Demo
-                </button>
-              </div>
+        {/* Trust Signals */}
+        <div className="text-center mt-16 lg:mt-20">
+          <div className="inline-flex items-center gap-8 text-slate-500">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span className="body-sm">HIPAA Compliant</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span className="body-sm">SOC 2 Certified</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span className="body-sm">256-bit Encryption</span>
             </div>
           </div>
         </div>
+
+        {/* CTA */}
+        <div className="text-center mt-12">
+          <button className="btn-primary">
+            Join These Professionals
+          </button>
+          <p className="body-sm text-slate-500 mt-4">
+            Start your free trial • No credit card required
+          </p>
+        </div>
       </div>
     </section>
-  )
-} 
+  );
+};
+
+export default Testimonials;
