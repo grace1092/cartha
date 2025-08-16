@@ -45,8 +45,8 @@ export default function Pricing() {
     {
       name: 'Solo Practitioner',
       icon: Users,
-      price: 49,
-      originalPrice: 120,
+      price: 50,
+      originalPrice: 125,
       description: 'Perfect for individual therapists, psychologists, and counselors',
       subtitle: 'Everything you need to manage your practice',
       features: [
@@ -68,8 +68,8 @@ export default function Pricing() {
     {
       name: 'Small Group Practice',
       icon: Building,
-      price: 149,
-      originalPrice: 360,
+      price: 150,
+      originalPrice: 375,
       description: 'For small teams and group practices',
       subtitle: '2-10 practitioners',
       features: [
@@ -91,8 +91,8 @@ export default function Pricing() {
     {
       name: 'Large Organization',
       icon: Shield,
-      price: 499,
-      originalPrice: 1200,
+      price: 500,
+      originalPrice: 1250,
       description: 'For clinics, hospitals, and large practices',
       subtitle: '10+ practitioners',
       features: [
@@ -181,7 +181,7 @@ export default function Pricing() {
               Cartha handles your notes, billing, and client communication so you can focus on what matters.
             </p>
             <p className="text-lg font-semibold text-heading">
-              Starting at $49/month. Founding members save 59% for life.
+              Starting at $50/month. Founding members save 60% for life.
             </p>
           </div>
         </div>

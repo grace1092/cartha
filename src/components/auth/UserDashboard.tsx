@@ -466,7 +466,7 @@ export default function UserDashboard() {
                       {[
                         { 
                           name: 'Solo Practitioner', 
-                          price: '$49', 
+                          price: '$50', 
                           features: [
                             'AI-powered session notes',
                             'Client progress tracking',
@@ -479,7 +479,7 @@ export default function UserDashboard() {
                         },
                         { 
                           name: 'Small Group Practice', 
-                          price: '$149', 
+                          price: '$150', 
                           subtitle: '2-10 practitioners',
                           features: [
                             'Everything in Solo, plus:',
@@ -492,7 +492,7 @@ export default function UserDashboard() {
                         },
                         { 
                           name: 'Large Organization', 
-                          price: '$499', 
+                          price: '$500', 
                           subtitle: '10+ practitioners',
                           features: [
                             'Everything in Small Group, plus:',
