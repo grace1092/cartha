@@ -1,34 +1,70 @@
-'use client';
-
-import { useEffect } from 'react';
-import { useAuth } from '@/lib/context/AuthContext';
-import ComprehensiveDashboard from '@/components/dashboard/ComprehensiveDashboard';
-import { useRouter } from 'next/navigation';
+import Sidebar from '@/components/dashboard/Sidebar';
+import TopBar from '@/components/dashboard/TopBar';
+import NotesCard from '@/components/dashboard/NotesCard';
+import FollowupsCard from '@/components/dashboard/FollowupsCard';
+import ClientsCard from '@/components/dashboard/ClientsCard';
+import SchedulingCard from '@/components/dashboard/SchedulingCard';
+import AnalyticsCard from '@/components/dashboard/AnalyticsCard';
+import SecurityCard from '@/components/dashboard/SecurityCard';
 
 export default function DashboardPage() {
-  const { user, isLoading } = useAuth();
-  const router = useRouter();
+  return (
+    <div className="min-h-screen bg-[#FAFAF7]">
+      {/* Sidebar - Hidden on mobile */}
+      <div className="hidden lg:block">
+        <Sidebar />
+      </div>
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/auth/signin');
-    }
-  }, [user, isLoading, router]);
+      {/* Main Content */}
+      <div className="lg:ml-64">
+        {/* Top Bar */}
+        <TopBar />
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your dashboard...</p>
+        {/* Dashboard Content */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
+          <div className="mb-8">
+            <h1 className="font-[family-name:var(--font-playfair)] text-3xl font-bold text-[#222] mb-2">
+              Dashboard
+            </h1>
+            <p className="text-neutral-600">
+              Welcome back! Here's what's happening with your practice today.
+            </p>
+          </div>
+
+          {/* Feature Cards Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
+            {/* Notes Card */}
+            <div id="notes">
+              <NotesCard />
+            </div>
+
+            {/* Follow-ups Card */}
+            <div id="followups">
+              <FollowupsCard />
+            </div>
+
+            {/* Clients Card */}
+            <div id="clients">
+              <ClientsCard />
+            </div>
+
+            {/* Scheduling Card */}
+            <div id="scheduling">
+              <SchedulingCard />
+            </div>
+
+            {/* Analytics Card - Full Width */}
+            <div id="analytics" className="lg:col-span-2">
+              <AnalyticsCard />
+            </div>
+
+            {/* Security Card - Half Width */}
+            <div id="security" className="lg:col-span-1">
+              <SecurityCard />
+            </div>
+          </div>
         </div>
       </div>
-    );
-  }
-
-  if (!user) {
-    return null; // Will redirect to signin page
-  }
-
-  return <ComprehensiveDashboard currentView="dashboard" />;
-} 
+    </div>
+  );
+}

@@ -121,7 +121,10 @@ const LiveDemo = () => {
             >
               Watch Full Demo
             </button>
-            <button className="btn-secondary">
+            <button 
+              onClick={() => window.location.href = '/dashboard'}
+              className="btn-secondary"
+            >
               Try It Yourself
             </button>
           </div>

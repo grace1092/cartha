@@ -19,8 +19,8 @@ export default function Hero() {
 
   const handleGetDemo = useCallback(() => {
     performanceMonitor.measureUserInteraction('hero_get_demo_click', 0);
-    // Open Calendly for demo booking
-    window.open('https://calendly.com/cartha-demo/30min', '_blank', 'width=800,height=600');
+    // Route to dashboard for trial
+    window.location.href = '/dashboard';
   }, []);
 
   const handleSeeFeatures = useCallback(() => {

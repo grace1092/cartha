@@ -125,6 +125,7 @@ const PricingSimple = () => {
                 </ul>
 
                 <button
+                  onClick={() => window.location.href = '/dashboard'}
                   className={`w-full py-4 px-6 rounded-xl font-semibold transition-all duration-200 ${
                     plan.popular
                       ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl'

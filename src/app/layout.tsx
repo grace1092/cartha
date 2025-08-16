@@ -1,5 +1,5 @@
 import './globals.css'
-import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 import { APP_CONSTANTS } from '@/lib/utils'
 import { SessionNotesProvider } from '@/lib/context/SessionNotesContext'
 import { AuthProvider } from '@/lib/context/AuthContext'
@@ -14,9 +14,9 @@ const inter = Inter({
   preload: true,
 })
 
-const plusJakarta = Plus_Jakarta_Sans({ 
+const playfair = Playfair_Display({ 
   subsets: ['latin'], 
-  variable: '--font-plus-jakarta',
+  variable: '--font-playfair',
   display: 'swap',
   preload: true,
 })
@@ -83,7 +83,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${plusJakarta.variable}`}>
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <head>
         <meta name="theme-color" content="#3b82f6" />
         <meta name="color-scheme" content="light dark" />
@@ -107,7 +107,7 @@ export default function RootLayout({
         {/* Resource hints for performance */}
         <link rel="preload" href="/api/analytics/performance" as="fetch" crossOrigin="anonymous" />
       </head>
-      <body className="min-h-screen antialiased">
+      <body className="min-h-screen bg-[#FAFAF7] text-[#222] antialiased font-[family-name:var(--font-inter)]">
         {/* Skip to main content link for accessibility */}
         <a href="#main-content" className="skip-link sr-only focus:not-sr-only">
           Skip to main content
