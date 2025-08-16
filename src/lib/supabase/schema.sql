@@ -1415,4 +1415,180 @@ CREATE TRIGGER update_data_retention_policies_updated_at
 
 CREATE TRIGGER update_data_storage_quotas_updated_at 
     BEFORE UPDATE ON data_storage_quotas 
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column(); 
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Additional tables for complete therapy practice management system
+
+-- User Profiles table for therapist information
+CREATE TABLE user_profiles (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE UNIQUE,
+  first_name TEXT NOT NULL,
+  last_name TEXT NOT NULL,
+  profile_image_url TEXT,
+  phone TEXT,
+  address JSONB, -- {street, city, state, zipCode, country}
+  professional_info JSONB NOT NULL, -- {title, licenseNumber, licenseState, specializations, yearsExperience, education, certifications}
+  practice_info JSONB, -- {practiceName, practiceType, npiNumber, taxId, officeAddress, officePhone, website}
+  preferences JSONB DEFAULT '{}', -- {timezone, dateFormat, timeFormat, defaultSessionDuration, defaultSessionRate, currency, language}
+  notifications JSONB DEFAULT '{}', -- {email: {}, sms: {}, push: {}}
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Session Notes table for AI-powered documentation
+CREATE TABLE session_notes (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  session_id UUID NOT NULL REFERENCES therapy_sessions(id) ON DELETE CASCADE,
+  therapist_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  client_id UUID NOT NULL REFERENCES therapy_clients(id) ON DELETE CASCADE,
+  transcript TEXT,
+  soap_notes JSONB NOT NULL, -- {subjective, objective, assessment, plan}
+  goals TEXT[],
+  interventions TEXT[],
+  homework TEXT[],
+  next_session_notes TEXT,
+  audio_file_url TEXT,
+  status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'completed', 'reviewed')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Invoices table for billing management
+CREATE TABLE invoices (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  therapist_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  client_id UUID NOT NULL REFERENCES therapy_clients(id) ON DELETE CASCADE,
+  invoice_number TEXT NOT NULL UNIQUE,
+  issue_date DATE NOT NULL,
+  due_date DATE NOT NULL,
+  status TEXT DEFAULT 'draft' CHECK (status IN ('draft', 'sent', 'viewed', 'paid', 'overdue', 'cancelled')),
+  subtotal DECIMAL(10,2) NOT NULL DEFAULT 0,
+  tax DECIMAL(10,2) NOT NULL DEFAULT 0,
+  total DECIMAL(10,2) NOT NULL DEFAULT 0,
+  notes TEXT,
+  payment_method TEXT CHECK (payment_method IN ('card', 'bank', 'check', 'cash')),
+  paid_date DATE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Invoice Items table for detailed billing
+CREATE TABLE invoice_items (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  invoice_id UUID NOT NULL REFERENCES invoices(id) ON DELETE CASCADE,
+  session_id UUID REFERENCES therapy_sessions(id),
+  description TEXT NOT NULL,
+  session_date DATE,
+  duration_minutes INTEGER,
+  rate DECIMAL(10,2) NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Payment Records table for tracking payments
+CREATE TABLE payment_records (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  invoice_id UUID NOT NULL REFERENCES invoices(id) ON DELETE CASCADE,
+  amount DECIMAL(10,2) NOT NULL,
+  payment_method TEXT NOT NULL CHECK (payment_method IN ('card', 'bank', 'check', 'cash')),
+  payment_date DATE NOT NULL,
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'failed')),
+  reference_number TEXT,
+  processor_response JSONB,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Security Logs table for audit trails
+CREATE TABLE security_logs (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  action TEXT NOT NULL, -- 'login', 'logout', 'password_change', 'profile_update', etc.
+  ip_address INET,
+  user_agent TEXT,
+  location TEXT,
+  device_info JSONB,
+  success BOOLEAN DEFAULT true,
+  error_message TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- File Uploads table for managing documents and images
+CREATE TABLE file_uploads (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  file_name TEXT NOT NULL,
+  file_type TEXT NOT NULL,
+  file_size INTEGER NOT NULL,
+  file_url TEXT NOT NULL,
+  file_path TEXT NOT NULL,
+  purpose TEXT NOT NULL, -- 'profile_image', 'session_audio', 'document', etc.
+  reference_id UUID, -- ID of related record (session, client, etc.)
+  encryption_key TEXT, -- For HIPAA compliance
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Create indexes for better performance
+CREATE INDEX idx_user_profiles_user_id ON user_profiles(user_id);
+CREATE INDEX idx_session_notes_session_id ON session_notes(session_id);
+CREATE INDEX idx_session_notes_client_id ON session_notes(client_id);
+CREATE INDEX idx_invoices_therapist_id ON invoices(therapist_id);
+CREATE INDEX idx_invoices_client_id ON invoices(client_id);
+CREATE INDEX idx_invoices_status ON invoices(status);
+CREATE INDEX idx_invoice_items_invoice_id ON invoice_items(invoice_id);
+CREATE INDEX idx_payment_records_invoice_id ON payment_records(invoice_id);
+CREATE INDEX idx_security_logs_user_id ON security_logs(user_id);
+CREATE INDEX idx_security_logs_created_at ON security_logs(created_at);
+CREATE INDEX idx_file_uploads_user_id ON file_uploads(user_id);
+CREATE INDEX idx_file_uploads_reference_id ON file_uploads(reference_id);
+
+-- Create triggers for updated_at timestamps on new tables
+CREATE TRIGGER update_user_profiles_updated_at BEFORE UPDATE ON user_profiles
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_session_notes_updated_at BEFORE UPDATE ON session_notes
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_invoices_updated_at BEFORE UPDATE ON invoices
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Enable RLS on new tables
+ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE session_notes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE invoices ENABLE ROW LEVEL SECURITY;
+ALTER TABLE invoice_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE payment_records ENABLE ROW LEVEL SECURITY;
+ALTER TABLE security_logs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE file_uploads ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies for new tables
+CREATE POLICY "Users can view and modify their own profile" ON user_profiles
+  FOR ALL USING (auth.uid() = user_id);
+
+CREATE POLICY "Therapists can view their session notes" ON session_notes
+  FOR ALL USING (auth.uid() = therapist_id);
+
+CREATE POLICY "Therapists can view their invoices" ON invoices
+  FOR ALL USING (auth.uid() = therapist_id);
+
+CREATE POLICY "Invoice items inherit invoice permissions" ON invoice_items
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM invoices i 
+      WHERE i.id = invoice_id AND i.therapist_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Payment records inherit invoice permissions" ON payment_records
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM invoices i 
+      WHERE i.id = invoice_id AND i.therapist_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Users can view their own security logs" ON security_logs
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can manage their own files" ON file_uploads
+  FOR ALL USING (auth.uid() = user_id); 

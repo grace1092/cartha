@@ -591,27 +591,68 @@ html {
 
   /* ===== LUXURY SPACING & CONTAINERS ===== */
   .container-luxury {
-    @apply max-w-7xl mx-auto px-6 sm:px-8 lg:px-12;
+    @apply max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12;
   }
   
   .container-narrow {
-    @apply max-w-4xl mx-auto px-6 sm:px-8 lg:px-12;
+    @apply max-w-4xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12;
   }
   
   .container-wide {
-    @apply max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12;
+    @apply max-w-[90rem] mx-auto px-4 sm:px-6 md:px-8 lg:px-12;
   }
   
   .section-spacing {
-    @apply py-20 lg:py-32;
+    @apply py-12 md:py-20 lg:py-32;
   }
   
   .section-spacing-sm {
-    @apply py-16 lg:py-24;
+    @apply py-10 md:py-16 lg:py-24;
   }
   
   .section-spacing-lg {
-    @apply py-24 lg:py-40;
+    @apply py-16 md:py-24 lg:py-40;
+  }
+
+  /* ===== MOBILE-RESPONSIVE UTILITIES ===== */
+  .mobile-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6;
+  }
+  
+  .mobile-stack {
+    @apply flex flex-col sm:flex-row gap-4 sm:gap-6;
+  }
+  
+  .mobile-text {
+    @apply text-sm sm:text-base;
+  }
+  
+  .mobile-heading {
+    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl;
+  }
+  
+  .mobile-card {
+    @apply p-4 sm:p-6 lg:p-8;
+  }
+  
+  .mobile-button {
+    @apply w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4;
+  }
+  
+  .mobile-navigation {
+    @apply overflow-x-auto whitespace-nowrap;
+  }
+  
+  .mobile-table {
+    @apply block sm:table w-full overflow-x-auto;
+  }
+  
+  .mobile-hidden {
+    @apply hidden sm:block;
+  }
+  
+  .mobile-only {
+    @apply block sm:hidden;
   }
 
   /* ===== ANIMATIONS ===== */
